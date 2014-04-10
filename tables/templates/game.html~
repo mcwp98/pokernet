@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static "assets/css/game.css" %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <h1>Welcome to {{ table.id }} Table</h1>
+</div> 
+
+<div class="row">
+    <div class="col-md-2" id="op1">
+        <p>Name: <div id="op1-name">NONE</div></p>
+        <p>bank: <div id="op1-bank"></div></p>
+        <p>current bet: <div id="op1-bet"></div></p>
+        <p>hand total: <div id="op1-tot"></div></p>
+    </div>
+    <div class="col-md-2" id="op2">
+        <p>Name: <div id="op2-name">NONE</div></p>
+        <p>bank: <div id="op2-bank"></div></p>
+        <p>current bet: <div id="op2-bet"></div></p>
+        <p>hand total: <div id="op2-tot"></div></p>
+    </div>
+    <div class="col-md-2" id="op3">
+        <p>Name: <div id="op3-name">NONE</div></p>
+        <p>bank: <div id="op3-bank"></div></p>
+        <p>current bet: <div id="op3-bet"></div></p>
+        <p>hand total: <div id="op3-tot"></div></p>
+    </div>
+    <div class="col-md-2" id="op4">
+        <p>Name: <div id="op4-name">NONE</div></p>
+        <p>bank: <div id="op4-bank"></div></p>
+        <p>current bet: <div id="op4-bet"></div></p>
+        <p>hand total: <div id="op4-tot"></div></p>
+    </div>
+    <div class="col-md-2" id="op5">
+        <p>Name: <div id="op5-name">NONE</div></p>
+        <p>bank: <div id="op5-bank"></div></p>
+        <p>current bet: <div id="op5-bet"></div></p>
+        <p>hand total: <div id="op5-tot"></div></p>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-2" id="card1">
+        <p>Card 1:</p>
+    </div>
+    <div class="col-md-2" id="card2">
+        <p>Card 2: </p>
+    </div>
+    <div class="col-md-2" id="card3">
+        <p>Card 3: </p>
+    </div>
+    <div class="col-md-2" id="card4">
+        <p>Card 4: </p>
+    </div>
+    <div class="col-md-2" id="card5">
+        <p>Card 5: </p>
+    </div>
+<hr />
+<div class="row">
+    <div class="col-md-2">
+        <p>Hand:</p>
+        <p id="handContainer"></p>
+    </div>
+    <div class="col-md-2">
+        <p> Pot: </p>
+        <p id="potContainer"></p>
+    </div>
+    <div class="col-md-2">
+        <p> My last Bet: </p>
+        <p id="betContainer"></p>
+    </div>
+    <div class="col-md-2">
+        <p> Current Bet:</p>
+        <p id="tableBetContainer"></p>
+    </div>
+</div>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Chat</h3>
+        </div>
+        <div class="panel-body" id="chatBox" style="height:300px;overflow:scroll;">
+        </div>
+        <div class="panel-footer">
+            <div class="input-group">
+                <input type="text" class="form-control" id="chatText" />
+                <span class="input-group-btn">
+                    <button id="chatSend" class="btn btn-default" type="button">send message</button>
+                </span>
+            </div>
+            <div class="input-group" id="betBox" style="display:none;">
+                <input type="text" class="form-control" id="betAmt" />
+                <span class="input-group-btn">
+                    <button id="betSend" class="btn btn-default" type="button">Bet!</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <h2>Here are some links to the other pages</h2>
+    <a href="/">Go home</a>
+    <a href="/users">Go to profile</a>
+    <a href="/users/register">or register</a>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+<script src="http://127.0.0.1:80/socket.io/socket.io.js"></script>
+<script>
+    // use this to pass variables into js from django
+    var playerName = "wes";
+    var moneyToUse = 100000;
+</script>
+<script src="{% static "assets/js/game.js" %}"></script>
+{% endblock %}

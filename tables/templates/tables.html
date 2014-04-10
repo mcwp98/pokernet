@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block css %}
+<link href="{% static "assets/css/index.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<div class="site-wrapper-inner">
+
+<h1>Welcome to the tables.</h1>
+<br />
+
+{% for table in tables %}
+<p>Blind: {{ table.tableBlind }} Limit: {{ table.tableLimit }}</p>
+{% endfor %}
+<br />
+<br />
+
+<h2>Here are some links to the other pages</h2>
+<a href="/">Go home</a>
+<a href="/users">Go to profile</a>
+<a href="/users/register">or register</a>
+
+</div>
+
+{% endblock %}

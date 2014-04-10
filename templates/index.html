@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block css %}
+<link href="{% static "assets/css/index.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<div class="site-wrapper-inner">
+
+<h1>Welcome home, you made it.</h1>
+
+<h2>Here are some links to the other pages</h2>
+<a href="/users">Go to profile</a>
+<a href="/tables">Find or create table</a>
+<a href="/users/register">register</a>
+<a href="/users/login">log in</a>
+<a href="/users/logout">log out</a>
+
+</div>
+
+{% endblock %}
