@@ -20,3 +20,8 @@ def joinTable(request, tableID=1):
     # args['table'] = table
     
     return render_to_response('game.html', args)
+
+def createTable(request):
+	args={}
+	
+    return render_to_response('game.html', args)
