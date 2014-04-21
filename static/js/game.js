@@ -1,3 +1,4 @@
+var viewControl = require('./gameVieControl');
 /*** Client side of the game ****/
 
 var players = [];
@@ -15,7 +16,7 @@ var handPot = 0;
 var socket = io.connect('127.0.0.1:80');
 socket.on('connect', function() {
     socket.emit('connectToServer', {name: playerName, money: pot});
-    
+    viewControl = new viewControl();
     /**** game control *****/
     // use this to push game along, only one will do this
 
@@ -24,9 +25,9 @@ socket.on('connect', function() {
     // submit a bet
     $('#betSend').click(function() {
         var betAmt = parseInt($('#betAmt').val());
-        
+        betAmt += myCurrentBet;
         // bad bet, try again
-        if  ((betAmt % blind) != 0 || betAmt < blind) {
+        if  ((betAmt % blind) != 0 || betAmt < blind || betAmt < tableCurrentBet) {
             $("#chatBox").append("<p style='color:red'>System: invalid bet. must be at least the blind, or the current highest bet. May only be in incriments of the blind.</p>");
             return;
         }
@@ -43,6 +44,11 @@ socket.on('connect', function() {
     // submit a fold
 
     /*** listen events ****/
+    // we have a winner
+    socket.on('winner', function(data) {
+        pot += handPot;
+        console.log("I win");
+    });
     
     // set my player id
     socket.on('pid', function(data) {
@@ -111,8 +117,9 @@ socket.on('connect', function() {
         handPot += data.amount;
         tableCurrentBet = data.amount;
         $('#potContainer').text(handPot);
-        
         if (data.player == myId) {
+            console.log("Here" + data.player);
+            myCurrentBet = data.amount;
             $('#betBox').hide();
             $('#betContainer').text(tableCurrentBet);
             $('#tableBetContainer').text(tableCurrentBet);
@@ -120,8 +127,7 @@ socket.on('connect', function() {
             return;
         }
         // set their bet
-        var i;
-        for (i = 1; i < numPlayers+1; i++) {
+        for (var i = 1; i < numPlayers+1; i++) {
             if (players[i].id == data.player) {
                 players[i].setBet(data.amount);
                 

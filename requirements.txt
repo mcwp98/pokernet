@@ -1,0 +1,4 @@
+Django==1.6.2
+PIL==1.1.7
+argparse==1.2.1
+wsgiref==0.1.2

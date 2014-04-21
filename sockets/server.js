@@ -36,7 +36,7 @@ io.sockets.on('connection', function (socket) {
     socket.emit('pid', {pid: socket.id, blind: testTable.getBlind()});
         
     // Can't start yet, tell the man we're waiting
-    if (testTable.numPlayers < 2) {
+    if (testTable.numPlayers < 3) {
         socket.emit('alert', { text: 'we need more players'});
         console.log("waiting for more players");
     } 

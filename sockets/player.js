@@ -44,8 +44,12 @@ Player.prototype.setBank = function(amt) {
     this.bank += amt;
 }
 
+Player.prototype.setBetZero = function() {
+    this.currentBet = 0;
+}
+
 Player.prototype.setBet = function(amt) {
-    this.currentBet = amt;
+    this.currentBet += amt;
 }
 
 Player.prototype.getBet = function() {

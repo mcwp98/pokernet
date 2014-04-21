@@ -33,7 +33,7 @@ io.sockets.on('connection', function (socket) {
     
     // welcome them, alert them to their balance, and current players
     socket.emit('alert', {text: "Welcome, " + player.name});
-    socket.emit('pid', {pid: socket.id, blind: testTable.blind});
+    socket.emit('pid', {pid: socket.id, blind: testTable.getBlind()});
         
     // Can't start yet, tell the man we're waiting
     if (testTable.numPlayers < 2) {
