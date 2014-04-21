@@ -1,6 +1,6 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.http import HttpResponse
-from models import Table
+from models import Table, NewTableForm
 
 # Create your views here.
 
@@ -21,7 +21,19 @@ def joinTable(request, tableID=1):
     
     return render_to_response('game.html', args)
 
-def createTable(request):
-	args = {}
-	return render_to_response('game.html', args)
+def newtable(request):
+	if request.method == 'POST': # If the form has been submitted...
+        # ContactForm was defined in the the previous section
+		form = NewTableForm(request.POST) # A form bound to the POST data
+		if form.is_valid(): # All validation rules pass
+			# Process the data in form.cleaned_data
+			# ...
+			args = {}
+			return render_to_response('game.html', args)
+	else:
+		form = NewTableForm() # An unbound form
 	
+	return render(request, 'createTable.html', {
+		'form': form,
+	})
+    

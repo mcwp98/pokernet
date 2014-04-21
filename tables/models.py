@@ -1,5 +1,5 @@
 from django.db import models
-
+from django import forms
 # Create your models here.
 
 # Table Types:
@@ -31,4 +31,7 @@ class Table(models.Model):
     def closeTable(self):
         self.currentUsers = 0
         return
-    
+
+class NewTableForm(forms.Form):
+	tableLimit = forms.FloatField()
+	tableBlind = forms.FloatField()
