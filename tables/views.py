@@ -28,6 +28,9 @@ def newtable(request):
 		if form.is_valid(): # All validation rules pass
 			# Process the data in form.cleaned_data
 			# ...
+			
+			newTableEntry = Table(currentUsers=1, tableLimit=form.cleaned_data['tableLimit'], tableBlind=form.cleaned_data['tableBlind'] )
+			newTableEntry.save()
 			args = {}
 			return render_to_response('game.html', args)
 	else:
@@ -36,4 +39,6 @@ def newtable(request):
 	return render(request, 'createTable.html', {
 		'form': form,
 	})
+    
+    
     
