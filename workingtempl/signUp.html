@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up Page{% endblock %}
+
+{% block content %}
+{% if registered %}
+	game.views.homepage
+	
+{% else %}
+	<div class="navbar navbar-default navbar-fixed-top">
+		<h1 class="navbar-text">Poker</h1>
+	</div>
+	<div id="signUp" class="row input-group">
+		<form action="/signup/" method="post">
+			<input type="text" class="form-group col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3" placeholder="Name">
+			<input type="email" class="form-group col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3" placeholder="Email">
+			<input type="password" class="form-group col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3" placeholder="Password">
+			<input type="submit" class="btn btn-primary" value="Sign Up">
+		</form>
+	</div>
+{% endif %}
+{% endblock %}
