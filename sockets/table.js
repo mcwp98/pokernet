@@ -14,6 +14,7 @@ function Table(blind, limit, buyIn, io) {
   this.numPlayers = 0;
   this.curPlayer;
   this.dealer = 0;
+  this.numBets = 0;
 }
 
 
@@ -54,7 +55,7 @@ Table.prototype.showPlayer = function(pid) {
     }
 }
 
-// alert everyone to players in the table
+// alert someone to players in the table
 Table.prototype.showPlayers = function(pid) {
     for (i = 0; i < this.numPlayers; i++) { 
         this.io.sockets.socket(pid).emit('getPlayer', 
@@ -114,8 +115,10 @@ Table.prototype.issueBlind = function(type) {
     this.players[player].setBet(bet);
     this.players[player].setBank(bet);
     this.pot += bet;
-    this.io.sockets.emit('bet', { amount: bet, player: this.players[player].id });
+    this.io.sockets.emit('blind', { amount: bet, player: this.players[player].id });
     this.betQueue.push(player);
+    this.numBets++;
+    console.log('Number of bets' + this.numBets);
 }
 
 // ask for the next bet from player
@@ -127,26 +130,39 @@ Table.prototype.getBet = function() {
         
 // take a bet
 Table.prototype.takeBet = function(data) {
+
+    this.betQueue.push(this.curPlayer);
+
     // set their bet and bank
-    var bet;
+    var bet = data.amount;
+    this.numBets++;
     
-    this.players[this.curPlayer].setBet(data.amount);
-    this.players[this.curPlayer].setBank(-data.amount);
-    this.pot += data.bet;
-    
-    if (data.fold) { // we need to fold in this bet
-        this.io.sockets.emit('fold', {player: data.player});
-        this.players[this.curPlayer].setBet(0);
-        this.players[this.curPlayer].setActive(false);
-        
-    } else { // alert to bet
-        this.io.sockets.emit('bet', {player: data.player, amount: data.amount});
+    if (data.check) {       // if this is a check 
+        this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: false, check: true });
+    } else {                // if this is a bet/fold
+            this.players[this.curPlayer].setBank(bet);
+            this.players[this.curPlayer].setBet(bet);
+            this.pot += bet - this.currentBet;
+        if (data.fold) { // we need to fold in this bet
+            this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: true, check: false });
+            this.players[this.curPlayer].setActive(false);
+            if (this.returnActive().length == 1) {
+                this.endGame();
+                return;
+            }
+            // set bet to last bet to see if its the end
+            bet = this.currentBet;
+        } else { // alert to bet, and set it
+            this.currentBet = bet;
+            this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: false, check:false});
+        }
     }
     
-    // if this bet = next, we've hit the end
-    if (data.amount == this.players[this.betQueue[0]].getBet()) {
+    // if this bet = next and weve all bet once
+    if (bet == this.players[this.betQueue[0]].getBet() && this.numBets >= this.betQueue.length) {
         // reset the bet queue
         // reset current bet and player bets
+        this.numBets = 0;
         this.currentBet = 0;
         this.betQueue = [];
         for (player in this.players) {
@@ -162,11 +178,7 @@ Table.prototype.takeBet = function(data) {
                 this.constructQueue();
                 this.getBet();
             } else { // end of game
-                var winner = this.findWinner();
-                var winIndex = this.getPlayer(winner);
-                //io.sockets.emit('winner', {pid: winner});
-                this.io.sockets.emit('alert', {text: 'The winner is ' + this.players[this.getPlayer(winner)].getName()});
-                this.io.sockets.socket(winner).emit('winner');
+                this.endGame();
             }
             
         } else { // we deal flop
@@ -177,7 +189,6 @@ Table.prototype.takeBet = function(data) {
         
     } else {
         // repush to end, set bet, move on
-        this.betQueue.push(this.curPlayer);
         this.currentBet = data.amount;
         this.getBet();
     }
@@ -239,14 +250,44 @@ Table.prototype.showRiver = function() {
 
 }
 
+Table.prototype.endGame = function() {
+    var winner;
+    var active = this.returnActive();
+    // Find winner
+    // winner by folds
+    if (active.length == 1) winner = active[0];
+    else winner = this.findWinner(active);    // else find the winner
 
-Table.prototype.findWinner = function() {
+    var winIndex = this.getPlayer(winner);
+    
+    //io.sockets.emit('winner', {pid: winner});
+    this.io.sockets.emit('alert', {text: 'The winner is ' + this.players[winIndex].getName()});
+    this.io.sockets.socket(winner).emit('winner');
+}
+
+Table.prototype.findWinner = function(active) {
+    
     var hands = [];
-    for (player in this.players) {
-        hands[player] = {id: this.players[player].id, cards: this.players[player].getHand()};
+    var temp;
+    for (player in active) {
+        temp = this.getPlayer(active[player]);
+        hands[player] = {id: this.players[temp].id, cards: this.players[temp].getHand()};
     }
     var ranking = Ranker.orderHands(hands, this.cards);
     return ranking[0][0].id;
 }
 
+// returns an array of active player indexes in the table
+Table.prototype.returnActive = function() {
+    var active = [];
+    var count = 0;
+    for (player in this.players) {
+        if (this.players[player].getActive() == true) {
+            active[count++] = this.players[player].id;
+        }
+    }
+    console.log("HERERERERERERERERERERE " + active[0] + " HERERE " + active[1]);
+    return active;
+}
+        
 module.exports = Table;

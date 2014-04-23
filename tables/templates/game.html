@@ -101,7 +101,6 @@
         <div class="cardContainer" id="tableCards">
             <div class="tableInfo">
                 <p style="display:inline" >Pot: <div style="display:inline" id="potContainer">0</div></p>
-                <p style="display:inline" >Current Bet: <div style="display:inline" id="betContainer">0</div></p>
             </div>
             <img class="card" id="card1" />
             <img class="card" id="card2" />
@@ -140,8 +139,10 @@
     <div class="col-lg-3" style="border: 1px solid black">
         <div class="cardContainer" style="position:relative;" >
             <button id="checkSend" class="btn btn-default" type="button">Check</button>
-            <button id="checkSend" class="btn btn-default" type="button">Fold</button>
+            <button id="foldSend" class="btn btn-default" type="button">Fold</button>
             <button id="startGame" class="btn btn-default" type="button">Start Game!</button>
+            <p style="display:inline;">Bank: <div id="myBank" style="color:yellow;display:inline;"></div></p>
+            <p style="display:inline" >Current Bet: <div style="display:inline" id="betContainer">0</div></p>
             <div class="input-group" id="betBox" style="bottom:0; position:absolute;">
                 <input type="text" class="form-control" id="betAmt" />
                 <span class="input-group-btn">
@@ -173,10 +174,14 @@
 {% endblock %}
 
 {% block js %}
+
+{{ table.id }}
+{{ table.currentUsers }}
+
 <script src="http://127.0.0.1:80/socket.io/socket.io.js"></script>
 <script>
     // use this to pass variables into js from django
-    var playerName = "wes";
+    var playerName = '{{ username }}';
     var moneyToUse = 100000;
 </script>
 <script src="{% static "assets/js/game.js" %}"></script>
