@@ -14,12 +14,13 @@ def tables(request):
     
 # join a table
 def joinTable(request, tableID=1):
-    # table = Table.objects.get(id=tableID)
-    
-    args = {}
-    # args['table'] = table
-    
-    return render_to_response('game.html', args)
+	table = Table.objects.get(id=tableID)
+	table.currentUsers = table.currentUsers +1
+	table.save()
+	args = {}
+	# args['table'] = table
+	
+	return render_to_response('game.html', args)
 
 def newtable(request):
 	if request.method == 'POST': # If the form has been submitted...
