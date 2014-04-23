@@ -1,9 +1,0 @@
-===============
-POKERNET
-===============
-
-This is an early version of a poker website built using node.js, django, and socket.io to provice real time moves and chat.
-
-Currently, it will run using up to 6 players in a room, although it cannot determine the winner of a game.
-
-In order to play the game, navigate to dutch.mathcs.emory.edu:8100/tables/1/.
