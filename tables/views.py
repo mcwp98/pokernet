@@ -17,7 +17,9 @@ def joinTable(request, tableID=1):
 	table = Table.objects.get(id=tableID)
 	table.currentUsers = table.currentUsers +1
 	table.save()
+	
 	args = {}
+	args['tables'] = table
 	# args['table'] = table
 	
 	return render_to_response('game.html', args)
