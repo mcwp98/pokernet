@@ -9,14 +9,16 @@ function Deck() {
     }
 }
 
+
 // Create the entire deck
 Deck.prototype.createCards = function() {
-    var suits = ["H", "C", "S", "D"];
+    var suits = ["h", "c", "s", "d"];
+    var faces = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"];
     var cards = [];
     cardCount = 0;
-    for (i = 1; i < 14; i++) {
+    for (i = 0; i < 13; i++) {
         for (j = 0; j < 4; j++) {
-            cards[cardCount++] = i + suits[j];
+            cards[cardCount++] = faces[i] + suits[j];
         }
     }
     return cards;

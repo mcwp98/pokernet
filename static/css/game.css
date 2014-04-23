@@ -10,3 +10,7 @@
 	background-color: #04B404;
 	text-align: center;
 }
+
+.players {
+	height: percentage(((3(@columns / @grid-columns))/4));
+}

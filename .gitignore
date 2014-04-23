@@ -1,0 +1,5 @@
+*~
+/.DS_Store
+/storage.db
+venv/
+/sockets/node_modules/
