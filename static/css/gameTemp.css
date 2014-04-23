@@ -1,0 +1,23 @@
+.baseContainer {
+    background-color: green;
+    width:1170px;
+}
+
+.cardContainer {
+    height:250px; 
+    margin-top:10px; 
+    margin-bottom:10px; 
+    border: 1px solid black;
+}
+
+#tableCards {
+
+}
+
+.row {
+    color:white;
+}
+
+.cards {
+
+}
