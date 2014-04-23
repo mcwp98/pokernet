@@ -23,29 +23,30 @@ io.sockets.on('connection', function (socket) {
   // for now, connect to test table, only two players to start, no midgame join
   
   socket.on('connectToServer', function(data) {
-    //console.log("Adding " + data.name + " to table " + testTable.blind);
-  
+    
+    // create a new player
     var player = new Player(socket.id, data.money);
     player.setName(data.name);
     player.setTableID(testTable);
     
+    // add player to the table
     testTable.addPlayer(player);
     
-    // welcome them, alert them to their balance, and current players
+    // send player their socket id and blind
     socket.emit('alert', {text: "Welcome, " + player.name});
     socket.emit('pid', {pid: socket.id, blind: testTable.getBlind()});
-        
-    // Can't start yet, tell the man we're waiting
-    if (testTable.numPlayers < 3) {
-        socket.emit('alert', { text: 'we need more players'});
-        console.log("waiting for more players");
-    } 
-    else {    // We've got at least 2, let's start the game
-        testTable.startGame();
-        // let every know the game has started
-        io.sockets.emit('alert', {text: "Game started!!"});
-    }
     
+    // show everyone we entered the table
+    testTable.showPlayer(socket.id);
+    // let me know who is in the table
+    testTable.showPlayers(socket.id);
+    
+  });
+  
+  // start the game
+  socket.on('start', function() {
+    io.sockets.emit('alert', {text: "Game has begun"});
+    testTable.startGame();
   });
   
   // route bets into the table
@@ -53,12 +54,10 @@ io.sockets.on('connection', function (socket) {
       testTable.takeBet(data);
   });
   
-  
   // let's handle user messaging here for now
   socket.on('chat', function(data) {
       io.sockets.emit('chat', data);
   });
-  
   
 });
 

@@ -10,14 +10,35 @@
 <div class="site-wrapper-inner">
 
 <h1>Welcome to the tables.</h1>
-<br />
 
+<a href="newtable" />Create Table</a>
+
+<br />
+<center>
+<table>
+
+<tr><td>Table ID</td><td>  Blind</td> <td>Limit</td> <td></td></tr>
 {% for table in tables %}
-<p>Blind: {{ table.tableBlind }} Limit: {{ table.tableLimit }}</p>
-{% endfor %}
-<br />
-<br />
 
+<tr>
+<td>{{ table.id }}</td>
+<td>{{ table.tableBlind }}</td>
+<td>{{ table.tableLimit }}</td>
+<td>
+	  
+	{% if table.currentUsers < 7 %}
+		<a href="/tables/{{ table.id }}">Join</a>
+	{% else %}
+		Full
+	{% endif %}
+  
+</td>
+</tr>
+{% endfor %}
+</table>
+</center>
+<br />
+<br />
 <h2>Here are some links to the other pages</h2>
 <a href="/">Go home</a>
 <a href="/users">Go to profile</a>

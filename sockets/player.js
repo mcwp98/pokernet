@@ -5,6 +5,15 @@ function Player(playerID, money, name) {
     this.hand = [];
     this.bank = money;
     this.currentBet = 0;
+    this.isActive = false;
+}
+
+Player.prototype.getActive = function() {
+    return this.isActive;
+}
+
+Player.prototype.setActive = function(bool) {
+    this.isActive = bool;
 }
 
 Player.prototype.getID = function() {

@@ -2,6 +2,7 @@ var Deck = require('./deck.js');
 var Ranker = require('handranker');
 
 function Table(blind, limit, buyIn, io) {
+  this.maxPlayers = 7;
   this.blind = blind;
   this.limit = limit;
   this.players = [];
@@ -19,8 +20,8 @@ function Table(blind, limit, buyIn, io) {
 
 // Start a game
 Table.prototype.startGame = function() {
-    // alert players
-    this.showPlayers();
+    // activate players
+    this.activatePlayers();
     
     // announce dealer
     
@@ -41,10 +42,22 @@ Table.prototype.startGame = function() {
     this.getBet();
 }
 
+// show the latest player
+Table.prototype.showPlayer = function(pid) {
+    for (player in this.players) {
+        if (this.players[player].id == pid) {
+            this.io.sockets.emit('getPlayer', 
+                            { id: this.players[player].id
+                            , bank: this.players[player].bank
+                            , name: this.players[player].name });
+        }
+    }
+}
+
 // alert everyone to players in the table
-Table.prototype.showPlayers = function() {
+Table.prototype.showPlayers = function(pid) {
     for (i = 0; i < this.numPlayers; i++) { 
-        this.io.sockets.emit('getPlayer', 
+        this.io.sockets.socket(pid).emit('getPlayer', 
                                     { id: this.players[i].id
                                     , bank: this.players[i].bank
                                     , name: this.players[i].name });
@@ -70,18 +83,25 @@ Table.prototype.dealPlayers = function() {
 }
 
 // set up a queue to track bets
-Table.prototype.constructQueue = function(dealer) {
+Table.prototype.constructQueue = function() {
     var i = (this.dealer+1)%this.numPlayers;
 
     // push all but the dealer
     while (i != this.dealer) {
-        this.betQueue.push(i);
+        if (this.players[i].getActive()) this.betQueue.push(i);
         i = (i+1)%this.numPlayers;
-        console.log('pushing better ' + i);
     }
     
     // push dealer last
-    this.betQueue.push(this.dealer); 
+    if (this.players[this.dealer].getActive()) this.betQueue.push(this.dealer);
+ 
+}
+
+// set all player statuses to active
+Table.prototype.activatePlayers = function() {
+    for (player in this.players) {
+        this.players[player].setActive(true);
+    }
 }
 
 // Function to handle posting a blind
@@ -108,13 +128,18 @@ Table.prototype.getBet = function() {
 // take a bet
 Table.prototype.takeBet = function(data) {
     // set their bet and bank
+    var bet;
     
     this.players[this.curPlayer].setBet(data.amount);
     this.players[this.curPlayer].setBank(-data.amount);
     this.pot += data.bet;
     
-    // Alert everyone
-    this.io.sockets.emit('bet', {player: data.player, amount: data.amount});
+    if (data.fold) { // we need to fold in this bet
+        this.io.sockets.emit('fold', {player: data.player});
+        
+    } else { // alert to bet
+        this.io.sockets.emit('bet', {player: data.player, amount: data.amount});
+    }
     
     // if this bet = next, we've hit the end
     if (data.amount == this.players[this.betQueue[0]].getBet()) {
