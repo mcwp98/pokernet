@@ -1,0 +1,13 @@
+        (function() {
+            var socket = io.connect('127.0.0.1');
+            //socket.emit('connectToServer', {name: "Wes", money: 1000});
+                socket.on('news', function (data) {
+                console.log(data);
+                socket.emit('my other event', { my: 'data' });
+                var x = 0;
+                while (x < 10) {
+                    socket.emit('my other event', { test: 'test'});
+                    x++;
+                }
+            });
+        })();
