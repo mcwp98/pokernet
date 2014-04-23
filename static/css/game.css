@@ -1,3 +1,12 @@
 #chatBox {
     text-align: left;
 }
+
+#table {
+	background-color: #00FF00;
+}
+
+.box {
+	background-color: #04B404;
+	text-align: center;
+}
