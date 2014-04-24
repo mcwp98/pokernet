@@ -80,6 +80,7 @@ Table.prototype.dealPlayers = function() {
     for (player in this.players) {
         var hand = this.players[player].getHand()
         this.io.sockets.socket(this.players[player].id).emit('getHand', hand);
+        console.log("HERERERERE");
     }
 }
 
@@ -250,9 +251,14 @@ Table.prototype.showRiver = function() {
 
 }
 
+// end game mechanics
+// 1. find the winner
+// 2. reset players current bids, table bids, table cards, player cards
+// 3. alert the table to the winner
 Table.prototype.endGame = function() {
     var winner;
     var active = this.returnActive();
+    
     // Find winner
     // winner by folds
     if (active.length == 1) winner = active[0];
@@ -260,9 +266,25 @@ Table.prototype.endGame = function() {
 
     var winIndex = this.getPlayer(winner);
     
-    //io.sockets.emit('winner', {pid: winner});
+    // let the table know of the winner
+    this.io.sockets.emit('winner', {pid: winner});
     this.io.sockets.emit('alert', {text: 'The winner is ' + this.players[winIndex].getName()});
-    this.io.sockets.socket(winner).emit('winner');
+    
+    // add the current pot to the winner's pot
+    this.players[winIndex].addBank(this.pot);
+    
+    // reset the player cards and bets
+    for (player in this.players) {
+        this.players[player].setBetZero();
+        this.players[player].clearHand('');
+        
+    }
+    
+    // clear the table current bet, pots, cards, and iterate dealer
+    this.pot = 0;
+    this.cards = [];
+    this.currentBet = this.blind;
+    this.dealer = this.dealer+1%this.numPlayers;
 }
 
 Table.prototype.findWinner = function(active) {

@@ -45,12 +45,21 @@ Player.prototype.setHand = function(card) {
     else this.hand[1] = card;
 }
 
+Player.prototype.clearHand = function() {
+    this.hand[0] = null;
+    this.hand[1] = null;
+}
+
 Player.prototype.getBank = function() {
     return this.bank;
 }
 
 Player.prototype.setBank = function(amt) {
     this.bank += amt - this.currentBet;
+}
+
+Player.prototype.addBank = function(amt) {
+    this.bank += amt;
 }
 
 Player.prototype.setBetZero = function() {

@@ -24,6 +24,20 @@ socket.on('connect', function() {
     /**** send events *****/
     // start the game!
     $('#startGame').click(function() {
+    
+        // double check that the board is clear
+        viewControl.setPot(0);
+        handPot = 0;
+        
+        myCards = [];
+        tableCards = [];
+        viewControl.hideCards();
+        
+        tableCurrentBet = 0;
+        myCurrentBet = 0;
+        for (player in players) viewControl.updateOpponent(player, players[player].bank, 0, false);
+        
+        // emit the signal to start
         socket.emit('start');
     });
 
@@ -69,16 +83,27 @@ socket.on('connect', function() {
     
     // submit a check
     $('#checkSend').click(function() {
+        // make sure that it is allowed
+        if (myCurrentBet != tableCurrentBet ) {
+            viewControl.showMessage('System', "You cannot check at this time");
+            return;
+        }
         socket.emit('bet', {player: myId, amount: myCurrentBet, fold: false, check: true});
         viewControl.showMessage('Check', 'You have checked');
         viewControl.hideBet();
     });
 
     /*** listen events ****/
-    // we have a winner
+    
+    // we have a winner, display all cards and the winner
     socket.on('winner', function(data) {
-        pot += handPot;
-        viewControl.setMyPot(pot);
+        if (data.pid == myId) {
+            pot += handPot;
+            viewControl.setBank(pot);
+            viewControl.showMessage('Winner', 'You have won the pot of ' + handPot);
+        } else {
+            viewControl.showMessage('Winner', 'You have lost the pot of ' + handPot);
+        }
     });
     
     // set my player id

@@ -14,6 +14,32 @@ viewControl.prototype.showHand = function(cards) {
     $("#myCard2").attr('src', '/static/assets/img/cards/' + cards[1] + '.png');
 }
 
+// shows an opponents hand
+viewControl.prototype.showOppHand = function(label, cards) {
+    $('#op' + i + '-card1').attr('src','/static/assets/img/cards/' + cards[0] + '.png');
+    $('#op' + i + '-card2').attr('src','/static/assets/img/cards/' + cards[1] + '.png');
+}
+
+// hides all cards on the board
+viewControl.prototype.hideCards = function(size) {
+
+    // hide mine
+    $("#myCard1").attr('src', '');
+    $("#myCard2").attr('src', '');
+    
+    // hide the opponent
+    for (var i = 1; i <= size; i++) {
+        $('#op' + i + '-card1').attr('src','');
+        $('#op' + i + '-card2').attr('src', '');
+    }
+    
+    // hide the board
+    for (i=1; i <= 5; i++) {
+        $('#card' + i).attr('src', '');
+    }
+    
+}
+
 // adds a player to the table
 viewControl.prototype.addPlayer = function(label, name) {
     $('#op' + label + '-name').text(name);
