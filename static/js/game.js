@@ -17,6 +17,7 @@ var socket = io.connect('127.0.0.1:80');
 socket.on('connect', function() {
     socket.emit('connectToServer', {name: playerName, money: pot});
     viewControl = new viewControl();
+    viewControl.setBank(pot);
     /**** game control *****/
     // use this to push game along, only one will do this
 
@@ -28,13 +29,10 @@ socket.on('connect', function() {
 
     // submit a bet
     $('#betSend').click(function() {
-        var betAmt = parseInt($('#betAmt').val());
-        betAmt += myCurrentBet;
+        var betTemp = parseInt($('#betAmt').val());
+        var betAmt = betTemp + myCurrentBet;
         
-        // were checking
-        if (betAmt == 0) {
-            return;
-        }
+        // were checking, if possible
         
         // bad bet, try again
         if  ((betAmt % blind) != 0 || betAmt < blind || betAmt < tableCurrentBet) {
@@ -44,18 +42,43 @@ socket.on('connect', function() {
         
         // this will put you under
         
+        // set my bet and pot, display them
         myCurrentBet = betAmt;
-        pot -= myCurrentBet;
-        socket.emit('bet', {player: myId, amount:betAmt});
+        pot -= betTemp;
+        handPot += betTemp
+        viewControl.setPot(handPot);
+        viewControl.setBank(pot);
+        viewControl.setMyBet(myCurrentBet);
+        
+        // hide betting, show we've bet
+        viewControl.hideBet();
+        viewControl.showMessage('Bet', "You have bet: " + betAmt);
+        
+        socket.emit('bet', {player: myId, amount:betAmt, fold: false, check: false});
   
     });
     
     // submit a fold
+    $('#foldSend').click(function() {
+        socket.emit('bet', {player: myId, amount: 0, fold: true, check:false});
+        myCurrentBet = 0;
+        viewControl.setMyBet(myCurrentBet);
+        viewControl.showMessage('Fold', "You have folded from this hand");
+        viewControl.hideBet();
+    });
+    
+    // submit a check
+    $('#checkSend').click(function() {
+        socket.emit('bet', {player: myId, amount: myCurrentBet, fold: false, check: true});
+        viewControl.showMessage('Check', 'You have checked');
+        viewControl.hideBet();
+    });
 
     /*** listen events ****/
     // we have a winner
     socket.on('winner', function(data) {
         pot += handPot;
+        viewControl.setMyPot(pot);
     });
     
     // set my player id
@@ -123,30 +146,59 @@ socket.on('connect', function() {
     
     // someone sent their bet
     socket.on('bet', function(data) {
+        var bet;
+        
+        if (data.fold == true || data.check == true) {
+            if (data.player == myId) return;
+        } else {
+            tableCurrentBet = data.amount;
+        }
 
-        // set the pot and current bet
+        for (var i = 1; i < numPlayers+1; i++) {
+            if (players[i].id == data.player) {
+                players[i].setBet(data.amount);
+                players[i].betting = false;
+                viewControl.oppNotBetting(i);
+                if (data.check) {
+                    viewControl.showMessage('Bet', players[i].name + " has bet: " + data.amount);
+                } else {
+                    handPot += data.amount - players[i].bet;
+                    viewControl.showMessage('Bet', players[i].name + " has checked.");
+                }
+            }
+        }
+        
+        viewControl.setPot(handPot);
+        viewControl.setTableBet(tableCurrentBet);
+
+    });
+    
+    socket.on('blind', function(data) {
+        
+        // set the pot and current bet, display them
         handPot += data.amount;
         tableCurrentBet = data.amount;
-        
-        // display them
         viewControl.setPot(handPot);
         viewControl.setTableBet(tableCurrentBet);
         
-        // is it us?
+        // if its us, also modify us
         if (data.player == myId) {
-            myCurrentBet = data.amount;
+            myCurrentBet = tableCurrentBet;
+            pot -= data.amount;
+            viewControl.setBank(pot);
             viewControl.setMyBet(myCurrentBet);
             viewControl.hideBet();
-            viewControl.showMessage('Bet', "you bet " + data.amount);
+            viewControl.showMessage('Bet', "You have posted blind: " + data.amount);
             return;
         }
+        
         // set their bet
         for (var i = 1; i < numPlayers+1; i++) {
             if (players[i].id == data.player) {
                 players[i].setBet(data.amount);
                 players[i].betting = false;
                 viewControl.oppNotBetting(i);
-                viewControl.showMessage('Bet', players[i].name + " bets " + data.amount);
+                viewControl.showMessage('Blind', players[i].name + " posted blind: " + data.amount);
             }
         }
 
