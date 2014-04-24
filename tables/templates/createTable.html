@@ -1,6 +1,19 @@
-new table
+{% extends "base.html" %}
+{% load staticfiles %}
 
-<form action="#" method="post">{% csrf_token %}
+{% block css %}
+<link href="{% static "assets/css/index.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+
+<h1> Create Table</h1>
+
+<form action="#" method="post"  role="form">{% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="Submit" />
 </form>
+
+
+{% endblock %}
