@@ -3,7 +3,7 @@
 var express = require('express')
   , http = require('http')
   , app = express()
-  , server = app.listen(80)
+  , server = app.listen(8081)
   , io = require('socket.io').listen(server)
   , Table = require('./table.js')
   , Player = require('./player.js');
