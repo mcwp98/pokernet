@@ -1,5 +1,8 @@
 function viewControl() {}
 
+/****** Client **********/
+/****** Opponents *******/
+/****** Table ***********/
 // shows the cards
 viewControl.prototype.showCard = function(position, card) {
     $('#card' + position).attr('src', "/static/assets/img/cards/" + card + '.png');
@@ -14,11 +17,6 @@ viewControl.prototype.showHand = function(cards) {
 // adds a player to the table
 viewControl.prototype.addPlayer = function(label, name) {
     $('#op' + label + '-name').text(name);
-}
-
-// updates my player info
-viewControl.prototype.updateMe = function() {
-    
 }
 
 viewControl.prototype.oppCardsHidden = function(size) {
@@ -45,8 +43,12 @@ viewControl.prototype.updateOpponent = function(label, bank, bet, betting) {
 }
 
 // set the table's pot
-viewControl.prototype.setPot = function(pot) {
-    $('#potContainer').text(pot);
+viewControl.prototype.setPot = function(amt) {
+    $('#potContainer').text(amt);
+}
+
+viewControl.prototype.setBank = function(amt) {
+    $('#myBank').text(amt);
 }
 
 // set the table's current bet

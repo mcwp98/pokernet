@@ -3,3 +3,4 @@
 /storage.db
 venv/
 /sockets/node_modules/
+*.pyc

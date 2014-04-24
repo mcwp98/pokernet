@@ -14,9 +14,8 @@ oppPlayer.prototype.updatePlayer = function() {
 
 // update the player bet, total, bank
 oppPlayer.prototype.setBet = function(amt) {
-    tableCurrentBet = amt;
+    this.bank -= amt - this.bet;
     this.bet = amt;
-    this.bank -= amt;
     this.updatePlayer();
     this.betting = false;
 }

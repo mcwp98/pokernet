@@ -11,13 +11,13 @@
 
 <h1>Welcome to the tables.</h1>
 
-<a href="newtable" />Create Table</a>
+<a href="newtable">Create Table</a>
 
 <br />
 <center>
 <table>
 
-<tr><td>Table ID</td><td>  Blind</td> <td>Limit</td> <td></td></tr>
+<tr><td>Table ID</td><td> Blind</td> <td>Limit</td> <td></td></tr>
 {% for table in tables %}
 
 <tr>
@@ -25,12 +25,12 @@
 <td>{{ table.tableBlind }}</td>
 <td>{{ table.tableLimit }}</td>
 <td>
-	  
-	{% if table.currentUsers < 7 %}
-		<a href="/tables/{{ table.id }}">Join</a>
-	{% else %}
-		Full
-	{% endif %}
+
+{% if table.currentUsers < 7 %}
+<a href="/tables/{{ table.id }}">Join</a>
+{% else %}
+Full
+{% endif %}
   
 </td>
 </tr>
