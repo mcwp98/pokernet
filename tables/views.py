@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from models import Table, NewTableForm
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
->>>>>>> ff112945a2d782afbd8f729608cc71c783826c31
 
 # Create your views here.
 
@@ -11,10 +10,6 @@ from django.core.context_processors import csrf
 def tables(request):
 	if not request.user.is_authenticated():
 		return redirect('/users/login/')
-<<<<<<< HEAD
-=======
-
->>>>>>> ff112945a2d782afbd8f729608cc71c783826c31
 	args = {}
 	args['tables'] = Table.objects.all()
 
@@ -22,11 +17,8 @@ def tables(request):
     
 # join a table
 def joinTable(request, tableID=1):
-<<<<<<< HEAD
-=======
 
     # make sure were authenticated
->>>>>>> ff112945a2d782afbd8f729608cc71c783826c31
 	if not request.user.is_authenticated():
 		return redirect('/users/login/')
 	table = Table.objects.get(id=tableID)
@@ -71,7 +63,6 @@ def newtable(request):
 			})
     
 def newtable(request):
->>>>>>> ff112945a2d782afbd8f729608cc71c783826c31
 	if request.method == 'POST': # If the form has been submitted...
 		# ContactForm was defined in the the previous section
 		form = NewTableForm(request.POST) # A form bound to the POST data
