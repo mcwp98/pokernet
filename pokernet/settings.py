@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'users',
     'tables',
+    'pokernet',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -54,9 +55,8 @@ ROOT_URLCONF = 'pokernet.urls'
 WSGI_APPLICATION = 'pokernet.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.realpath('.') + '/templates'
+    os.path.join(BASE_DIR, '/templates'),
 )
-
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.realpath('.') + '/assets/'
