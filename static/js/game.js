@@ -11,38 +11,100 @@ var myCards = [];
 var tableCards = [];
 var pot = moneyToUse;
 var handPot = 0;
+var limit;
 
 var socket = io.connect('127.0.0.1:80');
 socket.on('connect', function() {
     socket.emit('connectToServer', {name: playerName, money: pot});
-    
+    viewControl = new viewControl();
+    viewControl.setBank(pot);
     /**** game control *****/
     // use this to push game along, only one will do this
 
     /**** send events *****/
+    // start the game!
+    $('#startGame').click(function() {
+    
+        // double check that the board is clear
+        viewControl.setPot(0);
+        handPot = 0;
+        
+        myCards = [];
+        tableCards = [];
+        viewControl.hideCards();
+        
+        tableCurrentBet = 0;
+        myCurrentBet = 0;
+        for (player in players) viewControl.updateOpponent(player, players[player].bank, 0, false);
+        
+        // emit the signal to start
+        socket.emit('start');
+    });
 
     // submit a bet
     $('#betSend').click(function() {
-        var betAmt = parseInt($('#betAmt').val());
+        var betTemp = parseInt($('#betAmt').val());
+        var betAmt = betTemp + myCurrentBet;
+        
+        // were checking, if possible
         
         // bad bet, try again
-        if  ((betAmt % blind) != 0 || betAmt < blind) {
-            $("#chatBox").append("<p style='color:red'>System: invalid bet. must be at least the blind, or the current highest bet. May only be in incriments of the blind.</p>");
+        if  ((betAmt % blind) != 0 || betAmt < blind || betAmt < tableCurrentBet) {
+            viewControl.showMessage('System', 'Invalid bet');
             return;
         }
         
         // this will put you under
         
+        // set my bet and pot, display them
         myCurrentBet = betAmt;
-        pot -= myCurrentBet;
-        socket.emit('bet', {player: myId, amount:betAmt});
+        pot -= betTemp;
+        handPot += betTemp
+        viewControl.setPot(handPot);
+        viewControl.setBank(pot);
+        viewControl.setMyBet(myCurrentBet);
         
+        // hide betting, show we've bet
+        viewControl.hideBet();
+        viewControl.showMessage('Bet', "You have bet: " + betAmt);
         
+        socket.emit('bet', {player: myId, amount:betAmt, fold: false, check: false});
+  
     });
     
     // submit a fold
+    $('#foldSend').click(function() {
+        socket.emit('bet', {player: myId, amount: 0, fold: true, check:false});
+        myCurrentBet = 0;
+        viewControl.setMyBet(myCurrentBet);
+        viewControl.showMessage('Fold', "You have folded from this hand");
+        viewControl.hideBet();
+    });
+    
+    // submit a check
+    $('#checkSend').click(function() {
+        // make sure that it is allowed
+        if (myCurrentBet != tableCurrentBet ) {
+            viewControl.showMessage('System', "You cannot check at this time");
+            return;
+        }
+        socket.emit('bet', {player: myId, amount: myCurrentBet, fold: false, check: true});
+        viewControl.showMessage('Check', 'You have checked');
+        viewControl.hideBet();
+    });
 
     /*** listen events ****/
+    
+    // we have a winner, display all cards and the winner
+    socket.on('winner', function(data) {
+        if (data.pid == myId) {
+            pot += handPot;
+            viewControl.setBank(pot);
+            viewControl.showMessage('Winner', 'You have won the pot of ' + handPot);
+        } else {
+            viewControl.showMessage('Winner', 'You have lost the pot of ' + handPot);
+        }
+    });
     
     // set my player id
     socket.on('pid', function(data) {
@@ -54,37 +116,38 @@ socket.on('connect', function() {
     socket.on('getPlayer', function(data) {
         // make sure you aren't getting yourself
         if (data.id == myId) return;
+        
+        // add player and update views
         numPlayers++;
-        console.log("player id " + data.id);
         players[numPlayers] = new oppPlayer(data.id, data.bank, data.name, (numPlayers));
-        players[numPlayers].updatePlayer();
+        viewControl.addPlayer(numPlayers, data.name);
+        viewControl.updateOpponent(numPlayers, data.bank, 0, 0);
     });
 
     // recieve the hand
     socket.on('getHand', function(data) {
         myCards = data;
-        $("#handContainer").text(myCards);
+        viewControl.showHand(myCards);
+        viewControl.oppCardsHidden(numPlayers);
     });
     
     // recieve a card, show it
     socket.on('card', function(data) {
+    
         // if we're getting cards, reset bets
         tableCurrentBet = 0;
         myCurrentBet = 0;
-        var i;
+        viewControl.setTableBet(tableCurrentBet);
+        viewControl.setMyBet(myCurrentBet);
+
         for (player in players) {
-            console.log(player);
             players[player].setBet2(0);
+            viewControl.updateOpponent(player, players[player].bank, 0, false);
         }
-        if (tableCards) {
-            tableCards[tableCards.length] = data.card.toString();
-            console.log(data.card.toString());
-            $('#card' + tableCards.length).append("<p style='color:blue'>" + tableCards[tableCards.length-1] + "</p>");
-        } else {
-            tableCards[0] = data.card;
-            $('#card' + tableCards.length).append("<p style='color:blue'>" + tableCards[0] + "</p>");
-        }
-        
+
+        tableCards[tableCards.length] = data.card.toString();
+        viewControl.showCard(tableCards.length, tableCards[tableCards.length-1]);
+
     });
         
     
@@ -92,13 +155,14 @@ socket.on('connect', function() {
     socket.on('betting', function(data) {
         //its us, show the bet input
         if (data.pid == myId) {
-            $('#betBox').show();
+            viewControl.showBet(handPot, tableCurrentBet, blind, limit);
             return;
         }
         // its them, update bet status
         for (player in players) {
             if (players[player].id == data.pid) {
                 players[player].betting = true;
+                viewControl.oppBetting(player);
                 players[player].updatePlayer();
             }
         }
@@ -107,25 +171,59 @@ socket.on('connect', function() {
     
     // someone sent their bet
     socket.on('bet', function(data) {
-        //if its us, we know that
-        handPot += data.amount;
-        tableCurrentBet = data.amount;
-        $('#potContainer').text(handPot);
+        var bet;
         
-        if (data.player == myId) {
-            $('#betBox').hide();
-            $('#betContainer').text(tableCurrentBet);
-            $('#tableBetContainer').text(tableCurrentBet);
-            $("#chatBox").append("<p style='color:blue'>Bet: you bet " + data.amount + ".</p>");
-            return;
+        if (data.fold == true || data.check == true) {
+            if (data.player == myId) return;
+        } else {
+            tableCurrentBet = data.amount;
         }
-        // set their bet
-        var i;
-        for (i = 1; i < numPlayers+1; i++) {
+
+        for (var i = 1; i < numPlayers+1; i++) {
             if (players[i].id == data.player) {
                 players[i].setBet(data.amount);
-                
-                $("#chatBox").append("<p style='color:blue'>Bet: " + players[i].name + " bets " + data.amount + ".</p>");
+                players[i].betting = false;
+                viewControl.oppNotBetting(i);
+                if (data.check) {
+                    viewControl.showMessage('Bet', players[i].name + " has bet: " + data.amount);
+                } else {
+                    handPot += data.amount - players[i].bet;
+                    viewControl.showMessage('Bet', players[i].name + " has checked.");
+                }
+            }
+        }
+        
+        viewControl.setPot(handPot);
+        viewControl.setTableBet(tableCurrentBet);
+
+    });
+    
+    socket.on('blind', function(data) {
+        
+        // set the pot and current bet, display them
+        handPot += data.amount;
+        tableCurrentBet = data.amount;
+        viewControl.setPot(handPot);
+        viewControl.setTableBet(tableCurrentBet);
+        
+        // if its us, also modify us
+        if (data.player == myId) {
+            myCurrentBet = tableCurrentBet;
+            pot -= data.amount;
+            viewControl.setBank(pot);
+            viewControl.setMyBet(myCurrentBet);
+            viewControl.hideBet();
+            viewControl.showMessage('Bet', "You have posted blind: " + data.amount);
+            return;
+        }
+        
+        // set their bet
+        for (var i = 1; i < numPlayers+1; i++) {
+            if (players[i].id == data.player) {
+                players[i].setBet(data.amount);
+                players[i].betting = false;
+                viewControl.oppNotBetting(i);
+                viewControl.showMessage('Blind', players[i].name + " posted blind: " + data.amount);
             }
         }
 
@@ -133,7 +231,7 @@ socket.on('connect', function() {
 
     /**** message board *****/
     socket.on('chat', function(data) {
-        $("#chatBox").append("<p>" + data.name + ": " + data.text + "</p>");
+        viewControl.showMessage(data.name, data.text);
     });
 
     $('#chatSend').click(function() {
@@ -142,46 +240,12 @@ socket.on('connect', function() {
     });
     
     socket.on('alert', function(data) {
-        $("#chatBox").append("<p style='color:red'>System: " + data.text + "</p>");
+        viewControl.showMessage('System', data.text);
     });
 });
 
 
 // let's define a structure for opponent players
-function oppPlayer(playerID, money, name, label) {
-    this.id = playerID;
-    this.bank = money;
-    this.name = name;
-    this.bet = 0;
-    this.total = 0;
-    this.label = label;
-    this.betting = false;
-}
 
-// update the player views
-oppPlayer.prototype.updatePlayer = function() {
-    if (this.betting) $('#op' + this.label).css("border:2px solid yellow");
-    $('#op' + this.label + '-name').text(this.name);
-    $('#op' + this.label + '-bank').text(this.bank);
-    $('#op' + this.label + '-bet').text(this.bet);
-    $('#op' + this.label + '-tot').text(this.total);
-    $('#betContainer').text(myCurrentBet);
-    $('#tableBetContainer').text(tableCurrentBet);
-    
-}
-
-// update the player bet, total, bank
-oppPlayer.prototype.setBet = function(amt) {
-    tableCurrentBet = amt;
-    this.bet = amt;
-    this.total += amt;
-    this.bank -= amt;
-    this.updatePlayer();
-    this.betting = false;
-}
-
-oppPlayer.prototype.setBet2 = function(amt) {
-    this.bet = amt;
-}
 
 

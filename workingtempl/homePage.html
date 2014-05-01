@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+<div class="navbar navbar-default navbar-fixed-top">
+	<h1 class="navbar-text">Poker</h1>
+</div>
+<div id="profile" class="col-sm-4 col-md-4 col-lg-4">
+	<p>{{user.profile}}</p>
+	<p>{{user.username}}</p>
+	<p>${{user.balance}}</p>
+</div>
+<div class="container col-sm-offset-4 col-md-offset-4 col-lg-offset-4">
+	<p><a href="gamePlay.html">Play</a></p>
+	<p><a href="howTo.html">How To</a></p>
+	<p><a href="profile.html">Profile</a></p>
+</div>
+{% endblock %}

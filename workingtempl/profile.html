@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="navbar navbar-default navbar-fixed-top">
+	<h1 class="navbar-text">Profile</h1>
+</div>
+<p>{{user.picture}}</p>
+<p><b> User Name: </b>{{user.username}}</p>
+
+
+<p><b> Current Gold: </b>${{user.balance}}</p>
+
+<div>
+<form name="input" action="demo_form_action.asp" method="get">
+<input type="submit" value="Edit My Profile">
+</form> 
+</div>
+
+{% endblock %}
