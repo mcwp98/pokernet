@@ -9,25 +9,54 @@
 
 <div class="site-wrapper-inner">
 
-<h1>Let's register!</h1>
 
 {% if registered %}
 <h2>You've registered!</h2>
 
+<a href="/users/login">Login</a>
+
 {% else %}
 
-<form id="user_form" method="post" action="/users/register/" enctype="multipart/form-data">
+<h1>Register</h1>
+<form  id="user_form" method="post" action="/users/register/" enctype="multipart/form-data">
 
     {% csrf_token %}
-    
-    {{ user_form.as_p }}
-    {{ profile_form.as_p }}
-    
-    <input type="submit" name="submit" value="Register" />
+  <div class="row">
+    <div class="small-8">
+      <div class="row">
+        <div class="small-3 columns">
+          <label for="right-label" class="right inline">Username: </label>
+        </div>
+        <div class="small-9 columns">
+          <input id="id_username" maxlength="30" name="username" type="text" id="right-label"  />
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="small-3 columns">
+          <label for="right-label" class="right inline">Email: </label>
+        </div>
+        <div class="small-9 columns">
+          <input  id="id_email" maxlength="75" name="email" type="email" id="right-label"  />
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-3 columns">
+          <label for="right-label" class="right inline">Password: </label>
+        </div>
+        <div class="small-9 columns">
+          <input id="id_password" name="password" type="password" id="right-label"  />
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <input type="submit" name="submit" value="Register" class="button"/>
 </form>
+
+
+
 {% endif %}
-<a href="/">go home</a>
-<a href="/users/">go to profile</a>
 </div>
 
 {% endblock %}

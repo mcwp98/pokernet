@@ -20,3 +20,6 @@ Make edits.......
 To save:
 1. git commit -a -m "update message this can be whatever ... bla bla its just a note"
 2. git push origin master
+
+npm -g install express handranker socket.io
+npm link expres handranker socket.io

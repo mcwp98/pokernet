@@ -13,7 +13,7 @@ var pot = moneyToUse;
 var handPot = 0;
 var limit;
 
-var socket = io.connect('127.0.0.1:80');
+var socket = io.connect('127.0.0.1:8081');
 socket.on('connect', function() {
     socket.emit('connectToServer', {name: playerName, money: pot});
     viewControl = new viewControl();

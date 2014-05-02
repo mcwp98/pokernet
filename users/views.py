@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from models import UserStats
 from forms import UserForm, UserStatsForm
 
@@ -9,7 +9,8 @@ from forms import UserForm, UserStatsForm
 
 # get the profile
 def profile(request):
-    return render_to_response('profile.html')
+    args = RequestContext(request)
+    return render_to_response('profile.html', args)
    
 # register a new user 
 def register(request):
@@ -93,5 +94,8 @@ def user_login(request):
     # not post, so show form
     else:
         return render_to_response('login.html',{}, context)
-             
-            
+
+# user logout    
+def user_logout(request):
+    logout(request)
+    return render_to_response('index.html',{})

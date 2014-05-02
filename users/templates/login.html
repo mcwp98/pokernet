@@ -9,21 +9,39 @@
 
 <div class="site-wrapper-inner">
 
-<h1>Please log in.</h1>
+<h1>Login</h1>
 
 <form id="login_form" method="post" action="/users/login/">
 
     {% csrf_token %}
-    
-    Username: <input type="text" name="username" value="" size="50" />
-    <br />
-    Password: <input type="text" name="password" value="" size="50" />
-    <br />
-    
-    <input type="submit" name="submit" value="Log In" />
+  <div class="row">
+    <div class="small-8">
+      <div class="row">
+        <div class="small-3 columns">
+          <label for="right-label" class="right inline">Username: </label>
+        </div>
+        <div class="small-9 columns">
+          <input type="text" name="username" id="right-label"  />
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="small-3 columns">
+          <label for="right-label" class="right inline">Password: </label>
+        </div>
+        <div class="small-9 columns">
+          <input type="text" name="password" id="right-label"  />
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <input type="submit" name="submit" value="Log In"  class="button"/>
 </form>
 
-<a href="/">go home</a>
+
+<p> No Account? <a href="/users/register">Register</a></p>
+
 
 </div>
 
