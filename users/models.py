@@ -6,7 +6,6 @@ from django.contrib.auth.models import User # to extend the basic user
 class UserStats(models.Model):
     # link to user model
     user = models.OneToOneField(User)
-    
     balance = models.FloatField()
     picture = models.ImageField(upload_to='uploaded_files', blank=True)
     

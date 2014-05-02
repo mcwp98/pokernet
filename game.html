@@ -8,7 +8,7 @@
 {% block content %}
 
 <div class="row"> <!-- players 2-5 -->
-    <div class="large-3 columns" style="border: 1px solid black" id="op2"><!-- Player 2 -->
+    <div class="col-lg-3" style="border: 1px solid black" id="op2"><!-- Player 2 -->
         <div class="cardContainer">
             <div class="info">
                 <p style="display:inline"><div id="op2-name" style="display:inline">NONE</div></p>
@@ -25,7 +25,7 @@
             </div>
         </div>
     </div>
-    <div class="large-3 columns" style="border: 1px solid black" id="op3"><!-- Player 3 -->
+    <div class="col-lg-3" style="border: 1px solid black" id="op3"><!-- Player 3 -->
         <div class="cardContainer">
             <div class="info">
                 <p style="display:inline"><div id="op3-name" style="display:inline">NONE</div></p>
@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>
-    <div class="large-3 columns" style="border: 1px solid black" id="op4"><!-- Player 4 -->
+    <div class="col-lg-3" style="border: 1px solid black" id="op4"><!-- Player 4 -->
         <div class="cardContainer">
             <div class="info">
                 <p style="display:inline"><div id="op4-name" style="display:inline">NONE</div></p>
@@ -59,7 +59,7 @@
             </div>
         </div>
     </div>
-    <div class="large-3 columns" style="border: 1px solid black" id="op5"><!-- Player 5 -->
+    <div class="col-lg-3" style="border: 1px solid black" id="op5"><!-- Player 5 -->
         <div class="cardContainer">
             <div class="info">
             <div class="info">
@@ -80,7 +80,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="large-3 columns" style="border: 1px solid black" id="op1">
+    <div class="col-lg-3" style="border: 1px solid black" id="op1">
         <div class="cardContainer">
             <div class="info">
                 <p style="display:inline"><div id="op1-name" style="display:inline">NONE</div></p>
@@ -97,7 +97,7 @@
             </div>
         </div>
     </div>
-    <div class="large-6 columns" style="border: 1px solid black">
+    <div class="col-lg-6" style="border: 1px solid black">
         <div class="cardContainer" id="tableCards">
             <div class="tableInfo">
                 <p style="display:inline" >Pot: <div style="display:inline" id="potContainer">0</div></p>
@@ -109,7 +109,7 @@
             <img class="card" id="card5" />
         </div>
     </div>
-    <div class="large-3 columns" style="border: 1px solid black" id="op6">
+    <div class="col-lg-3" style="border: 1px solid black" id="op6">
         <div class="cardContainer">
             <div class="info">
                 <p style="display:inline"><div id="op6-name" style="display:inline">NONE</div></p>
@@ -128,7 +128,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="large-3 columns" style="border: 1px solid black">
+    <div class="col-lg-4" style="border: 1px solid black">
         <div class="cardContainer" >
             <h1>My hand:</h1>
             <img class="card" id="myCard1" />
@@ -136,7 +136,7 @@
             <h2 id="betting" style="color:yellow;display:none;">Betting!</h2>
         </div>
     </div>
-    <div class="large-3 columns" style="border: 1px solid black">
+    <div class="col-lg-3" style="border: 1px solid black">
         <div class="cardContainer" style="position:relative;" >
             <button id="checkSend" class="btn btn-default" type="button">Check</button>
             <button id="foldSend" class="btn btn-default" type="button">Fold</button>
@@ -151,7 +151,7 @@
             </div>
         </div>
     </div>
-    <div class="large-6 columns" style="border: 1px solid black">
+    <div class="col-lg-5" style="border: 1px solid black">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Chat</h3>
@@ -181,9 +181,8 @@
 <script src="http://127.0.0.1:8081/socket.io/socket.io.js"></script>
 <script>
     // use this to pass variables into js from django
-    var tableId    = '{{ table }}';
     var playerName = '{{ username }}';
-    var moneyToUse = '{{ amountPlay}}';
+    var moneyToUse = 100000;
 </script>
 <script src="{% static "assets/js/game.js" %}"></script>
 <script src="{% static "assets/js/gameViewControl.js" %}"></script>

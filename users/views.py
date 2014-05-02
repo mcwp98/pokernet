@@ -9,8 +9,9 @@ from forms import UserForm, UserStatsForm
 
 # get the profile
 def profile(request):
-    args = RequestContext(request)
-    return render_to_response('profile.html', args)
+	args = RequestContext(request)
+	args['UserStats'] = UserStats.objects.get(user=request.user)
+	return render_to_response('profile.html', args)
    
 # register a new user 
 def register(request):

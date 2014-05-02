@@ -1,9 +1,10 @@
 .baseContainer {
-    background-color: green;
+    background-color: #0066ff;
     width:1170px;
 }
 
 .cardContainer {
+    background-color: #333333;
     height:250px; 
     margin-top:10px; 
     margin-bottom:10px; 
