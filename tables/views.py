@@ -82,7 +82,7 @@ def newtable(request):
 			args = RequestContext(request)
 			
 			args['user']= request.user
-		return render_to_response('game.html', args)
+		return redirect( '/tables/'+ str(newTableEntry.id));
 	else:
 		form = NewTableForm() # An unbound form
 

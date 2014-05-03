@@ -51,6 +51,11 @@ socket.on('connect', function() {
 
     // submit a bet
     $('#betSend').click(function() {
+    
+        if (!allowBet) {
+            viewControl.showMessage('System', "Not your turn");
+        	return;
+        }
         var betTemp = parseInt($('#betAmt').val());
         var betAmt = betTemp + myCurrentBet;
         
@@ -76,12 +81,17 @@ socket.on('connect', function() {
         viewControl.hideBet();
         viewControl.showMessage('Bet', "You have bet: " + betAmt);
         
-        socket.emit('bet', {player: myId, amount:betAmt, fold: false, check: false});
+        socket.emit('bet', {table: tableId, player: myId, amount:betAmt, fold: false, check: false});
   
     });
     
     // submit a fold
     $('#foldSend').click(function() {
+    
+        if (!allowBet) {
+            viewControl.showMessage('System', "Not your turn");
+        	return;
+        }
         socket.emit('bet', {player: myId, amount: 0, fold: true, check:false});
         myCurrentBet = 0;
         viewControl.setMyBet(myCurrentBet);
@@ -92,13 +102,18 @@ socket.on('connect', function() {
     // submit a check
     $('#checkSend').click(function() {
         // make sure that it is allowed
-        if (myCurrentBet != tableCurrentBet ) {
-            viewControl.showMessage('System', "You cannot check at this time");
-            return;
+        if (!allowBet) {
+            viewControl.showMessage('System', "Not your turn");
+        	return;
         }
+        
+        if (myCurrentBet != tableCurrentBet ) {
+            viewControl.showMessage('System', "You cannot check at this time- you must bet higher");
+        } else {
         socket.emit('bet', {player: myId, amount: myCurrentBet, fold: false, check: true});
         viewControl.showMessage('Check', 'You have checked');
         viewControl.hideBet();
+        }
     });
 
     /*** listen events ****/
@@ -164,6 +179,7 @@ socket.on('connect', function() {
         //its us, show the bet input
         if (data.pid == myId) {
             viewControl.showBet(handPot, tableCurrentBet, blind, limit);
+            allowBet=true;
             return;
         }
         // its them, update bet status
