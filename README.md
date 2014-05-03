@@ -31,6 +31,10 @@ then cd to the /sockets/ directory and run
 
 >npm link expres handranker socket.io
 
+### liteSQL Database
+pokernet currently utilizes the liteSQL database, to create, navigate to the application directory and run:
+>python manage.py syncdb
+
 ## Development
 To run both server and client locally during development, a script is provided that will run both the node.js and django dev server. To use, simply cd into the project directory and run:
 > ./start.sh
