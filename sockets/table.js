@@ -110,11 +110,13 @@ Table.prototype.issueBlind = function(type) {
     this.incPlayer();
     
     //Update Pot
-    this.pot = parseFloat(this.pot+parseFloat(this.blind)*1.5);
+    this.pot = Number(Number(this.pot)+Number(this.blind)*1.5);
     
     this.largestRoundBet=this.blind;
     this.io.sockets.emit('betting', {pid: this.players[this.curBetPlayer].id});
-    console.log(this.curBetPlayer);
+    console.log("POTPOT" + this.pot);
+    console.log("POTPOT" + this.pot);
+    console.log("POTPOT" + this.pot);
 }
 
         
@@ -155,6 +157,7 @@ Table.prototype.takeBet = function(data) {
         // reset current bet and player bets
         this.numBets = 0;
         this.currentBet = 0;
+        this.largestRoundBet=-1;
         this.betQueue = [];
         for (player in this.players) {
             this.players[player].setBetZero();

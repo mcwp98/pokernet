@@ -38,9 +38,8 @@ socket.on('connect', function() {
         handPot = 0;
         
         myCards = [];
-        tableCards = [];
+        tableCards = [];;
         viewControl.hideCards();
-        
         tableCurrentBet = 0;
         myCurrentBet = 0;
         for (player in players) viewControl.updateOpponent(player, players[player].bank, 0, false);
@@ -72,7 +71,7 @@ socket.on('connect', function() {
         // set my bet and pot, display them
         myCurrentBet = betAmt;
         pot -= betTemp;
-        handPot += betTemp
+        handPot += Number(betTemp)
         viewControl.setPot(handPot);
         viewControl.setBank(pot);
         viewControl.setMyBet(myCurrentBet);
@@ -121,12 +120,29 @@ socket.on('connect', function() {
     // we have a winner, display all cards and the winner
     socket.on('winner', function(data) {
         if (data.pid == myId) {
-            pot += handPot;
+            pot += Number(handPot);
             viewControl.setBank(pot);
             viewControl.showMessage('Winner', 'You have won the pot of ' + handPot);
         } else {
             viewControl.showMessage('Winner', 'You have lost the pot of ' + handPot);
         }
+            
+        // double check that the board is clear
+        viewControl.setPot(0);
+        handPot = 0;
+        
+        myCards = [];
+        tableCards = [];
+        viewControl.hideCards();
+        
+        tableCurrentBet = 0;
+        myCurrentBet = 0;
+        for (player in players) viewControl.updateOpponent(player, players[player].bank, 0, false);
+        
+        // emit the signal to start
+        socket.emit('start', {table:tableId});
+        
+        
     });
     
     // set my player id
@@ -211,7 +227,7 @@ socket.on('connect', function() {
                 if (data.check) {
                     viewControl.showMessage('Bet', players[i].name + " has bet: " + data.amount);
                 } else {
-                    handPot += data.amount - players[i].bet;
+                    handPot += Number(data.amount) - Number(players[i].bet);
                     viewControl.showMessage('Bet', players[i].name + " has checked.");
                 }
             }
@@ -225,7 +241,7 @@ socket.on('connect', function() {
     socket.on('blind', function(data) {
         
         // set the pot and current bet, display them
-        handPot += data.amount;
+        handPot += Number(data.amount);
         tableCurrentBet = data.amount;
         viewControl.setPot(handPot);
         viewControl.setTableBet(tableCurrentBet);
@@ -233,7 +249,7 @@ socket.on('connect', function() {
         // if its us, also modify us
         if (data.player == myId) {
             myCurrentBet = tableCurrentBet;
-            pot -= data.amount;
+            pot -= Number(data.amount);
             viewControl.setBank(pot);
             viewControl.setMyBet(myCurrentBet);
             viewControl.hideBet();
