@@ -16,13 +16,21 @@ var tables = [];
 
 // let's create an initial table
 var testTable = new Table(10, 1000, 20000, io);
-
+var MapofTables = {};
 io.sockets.on('connection', function (socket) {
   
   /**** Connect to a table ******/
   // for now, connect to test table, only two players to start, no midgame join
+  //blind, limit, buyIn, io)
   
   socket.on('connectToServer', function(data) {
+    	console.log(data);
+    if (data.tableId in MapofTables) {
+    	console.log("TABLE EXISTS");
+    } else {
+    	console.log("TABLE DOES NOT EXIST");
+    	MapofTables[data.tableId] = new Table(data.tableBlind,data.tableLimit,data.moneyToUse,io);
+    }
     
     // create a new player
     var player = new Player(socket.id, data.money);

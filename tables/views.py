@@ -53,6 +53,8 @@ def joinTable(request, tableID=1):
 	args['table'] = table.id
 	args['username'] = current_user.username
 	args['id'] = current_user.id
+	args['tableLimit'] = table.tableLimit
+	args['tableBlind'] = table.tableBlind
 	
 	## AMOUNT PLAY
 	args['amountPlay'] = table.tableBlind*25
