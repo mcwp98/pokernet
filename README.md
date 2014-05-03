@@ -10,6 +10,7 @@ Python can be downloaded and installed to your system from https://www.python.or
 #### Django
 Django may be installed on the server by using
 >git clone git://github.com/django/django.git django-trunk
+and then
 >sudo pip install -e django-trunk/
 
 ### Node.js
