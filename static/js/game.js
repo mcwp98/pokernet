@@ -92,7 +92,7 @@ socket.on('connect', function() {
             viewControl.showMessage('System', "Not your turn");
         	return;
         }
-        socket.emit('bet', {player: myId, amount: 0, fold: true, check:false});
+        socket.emit('bet', {table: tableId,player: myId, amount: 0, fold: true, check:false});
         myCurrentBet = 0;
         viewControl.setMyBet(myCurrentBet);
         viewControl.showMessage('Fold', "You have folded from this hand");
@@ -110,7 +110,7 @@ socket.on('connect', function() {
         if (myCurrentBet != tableCurrentBet ) {
             viewControl.showMessage('System', "You cannot check at this time- you must bet higher");
         } else {
-        socket.emit('bet', {player: myId, amount: myCurrentBet, fold: false, check: true});
+        socket.emit('bet', {table: tableId,player: myId, amount: myCurrentBet, fold: false, check: true});
         viewControl.showMessage('Check', 'You have checked');
         viewControl.hideBet();
         }

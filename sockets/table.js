@@ -148,8 +148,9 @@ Table.prototype.takeBet = function(data) {
         }
     }
     
+    // NOT CORRECT- FIX LATER
     // if this bet = next and weve all bet once
-    if (bet == this.players[this.betQueue[0]].getBet() && this.numBets >= this.betQueue.length) {
+    if ((this.dealer +1) % this.numPlayers == this.curBetPlayer) {
         // reset the bet queue
         // reset current bet and player bets
         this.numBets = 0;
@@ -162,11 +163,9 @@ Table.prototype.takeBet = function(data) {
              if (this.cards.length == 3) { // deal turn
                 this.showTurn();
                 this.constructQueue();
-                this.getBet()
             } else if (this.cards.length == 4) { // deal river
                 this.showRiver();
                 this.constructQueue();
-                this.getBet();
             } else { // end of game
                 this.endGame();
             }
@@ -174,13 +173,11 @@ Table.prototype.takeBet = function(data) {
         } else { // we deal flop
             this.showFlop();
             this.constructQueue();
-            this.getBet();
         }
         
     } else {
         // repush to end, set bet, move on
         this.currentBet = data.amount;
-        this.getBet();
     }
     
     this.incPlayer();
