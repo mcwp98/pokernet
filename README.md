@@ -1,7 +1,20 @@
-#Install
-## Python
-Python can be downloaded to your system from https://www.python.org/
-## Node.js can be donwloaded and installed to your system from  http://nodejs.org/
+#Pokernet
+The pokernet game requires python and node.js function. The server end uses the django framework for the general application and a node.js instance running to handle games and logic.
+Several dependencies are also required on the server, including django for python and several libraries for node.js
+
+##Install
+
+### Python
+Python can be downloaded and installed to your system from https://www.python.org/
+
+#### Django
+Django may be installed on the server by using
+>git clone git://github.com/django/django.git django-trunk
+>sudo pip install -e django-trunk/
+
+### Node.js
+Node.js can be downloaded and installed to your system from  http://nodejs.org/
+
 Dependencies
 	Python
 	Node.js
