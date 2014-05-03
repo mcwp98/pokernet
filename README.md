@@ -10,11 +10,27 @@ Python can be downloaded and installed to your system from https://www.python.or
 #### Django
 Django may be installed on the server by using
 >git clone git://github.com/django/django.git django-trunk
+
 and then
+
 >sudo pip install -e django-trunk/
+
+#### Django Application Dependencies
+We require the Pillow module, to install:
+> pip install Pillow
+
 
 ### Node.js
 Node.js can be downloaded and installed to your system from  http://nodejs.org/
+
+#### Node.js Applications
+Pokernet uses several node.js applications including express, handranker, and socket.io. to instal them, use npm:
+>npm -g install express handranker socket.io
+
+then cd to the /sockets/ directory and run 
+
+>npm link expres handranker socket.io
+
 
 Dependencies
 	Python
