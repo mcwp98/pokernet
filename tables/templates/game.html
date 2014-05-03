@@ -136,14 +136,14 @@
             <h2 id="betting" style="color:yellow;display:none;">Betting!</h2>
         </div>
     </div>
-    <div class="large-3 columns" style="border: 1px solid black">
+    <div class="large-5 columns" style="border: 1px solid black">
         <div class="cardContainer" style="position:relative;" >
             <button id="checkSend" class="button [tiny small large]" type="button">Check</button>
             <button id="foldSend" class="button [tiny small large]" type="button">Fold</button>
-            <button id="startGame" class="button [tiny small large]"type="button">Start Game!</button>
-            <p style="display:inline;">Bank: <div id="myBank" style="color:yellow;display:inline;"></div></p>
-            <p style="display:inline" >Current Bet: <div style="display:inline" id="betContainer">0</div></p>
-            <div class="input-group" id="betBox" style="bottom:0; position:absolute;">
+            <button id="startGame" class="button [tiny small large]"type="button">Start</button>
+            <p>Bank: <span id="myBank" style="color:yellow;display:inline;"></span>
+            Current Bet: <span style="display:inline" id="betContainer">0</span></p>
+            <div class="input-group" id="betBox" >
                 <input type="text" class="form-control" id="betAmt" />
                 <span class="input-group-btn">
                     <button id="betSend" class="button [tiny small large]" type="button">Bet!</button>
@@ -151,7 +151,7 @@
             </div>
         </div>
     </div>
-    <div class="large-6 columns" style="border: 1px solid black">
+    <div class="large-4 columns" style="border: 1px solid black">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Chat</h3>

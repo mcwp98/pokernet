@@ -97,16 +97,16 @@ Table.prototype.activatePlayers = function() {
 
 // Function to handle posting a blind
 Table.prototype.issueBlind = function(type) {
-	//Big
-    this.players[this.curBetPlayer].setBet(this.blind);
-    this.players[this.curBetPlayer].setBank(this.blind);
-    this.io.sockets.emit('blind', { amount: this.blind, player: this.players[this.curBetPlayer].id });
+	//Small
+    this.players[this.curBetPlayer].setBet(this.blind/2);
+    this.players[this.curBetPlayer].setBank(this.blind/2);
+    this.io.sockets.emit('blind', { amount: this.blind/2, player: this.players[this.curBetPlayer].id });
     this.incPlayer();
     
     //Small
-    this.players[this.curBetPlayer % this.numPlayers].setBet(this.blind/2);
-    this.players[this.curBetPlayer % this.numPlayers].setBank(this.blind/2);
-    this.io.sockets.emit('blind', { amount: this.blind/2, player: this.players[this.curBetPlayer].id });
+    this.players[this.curBetPlayer % this.numPlayers].setBet(this.blind);
+    this.players[this.curBetPlayer % this.numPlayers].setBank(this.blind);
+    this.io.sockets.emit('blind', { amount: this.blind, player: this.players[this.curBetPlayer].id });
     this.incPlayer();
     
     //Update Pot
@@ -198,13 +198,18 @@ Table.prototype.addPlayer = function(player) {
 	if (this.numPlayers==7)
 		add=false;
 	for(var i=0;i<this.players.length;i++)
-		if(this.players[i].id == player.id)
-			add=false;
+		if(this.players[i].name == player.name) {
+			this.players.splice(i, 1);
+  	  		this.numPlayers= this.numPlayers -1;
+		}
 		
 		
 	if(add) {
   	  this.players[this.numPlayers] = player;
   	  this.numPlayers= this.numPlayers +1;
+  	  return true;
+	} else {
+		return false;
 	}
 }
 

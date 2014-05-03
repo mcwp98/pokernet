@@ -43,12 +43,13 @@ io.sockets.on('connection', function (socket) {
     
     // send player their socket id and blind
     socket.emit('alert', {text: "Welcome, " + player.name});
-    socket.emit('pid', {pid: socket.id, blind: curTable.getBlind()});
+    socket.emit('pid', {table: data.table, pname:player.name,pid: socket.id, blind: curTable.getBlind()});
     
     // show everyone we entered the table
     curTable.showPlayer(socket.id);
     // let me know who is in the table
     curTable.showPlayers(socket.id);
+    
   });
   
   // start the game

@@ -61,7 +61,7 @@ socket.on('connect', function() {
         // were checking, if possible
         
         // bad bet, try again
-        if  ((betAmt % blind) != 0 || betAmt < blind || betAmt < tableCurrentBet) {
+        if  (isNaN(betTemp) || (betAmt % blind/2)  > .001 || betAmt < blind || betAmt < tableCurrentBet) {
             viewControl.showMessage('System', 'Invalid bet');
             return;
         }
@@ -147,15 +147,23 @@ socket.on('connect', function() {
     
     // set my player id
     socket.on('pid', function(data) {
+    	if(tableId != data.table)
+    		return;
         myId = data.pid;
         blind = data.blind;
     });
+    
     
     // get a new opponent, add to array by playerID
     socket.on('getPlayer', function(data) {
         // make sure you aren't getting yourself
         if (data.id == myId) return;
         
+        for(var i=0;i<numPlayers;i++)
+        	if (players[i].name==data.name) {
+					players.splice(i, 1);
+					numPlayers--;
+				}
         // add player and update views
         numPlayers++;
         players[numPlayers] = new oppPlayer(data.id, data.bank, data.name, (numPlayers));
