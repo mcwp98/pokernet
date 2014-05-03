@@ -55,13 +55,14 @@ socket.on('connect', function() {
             viewControl.showMessage('System', "Not your turn");
         	return;
         }
-        var betTemp = parseInt($('#betAmt').val());
-        var betAmt = betTemp + myCurrentBet;
+        var betTemp = parseFloat($('#betAmt').val());
+        var betAmt = betTemp + parseFloat(myCurrentBet);
         
         // were checking, if possible
         
         // bad bet, try again
-        if  (isNaN(betTemp) || (betAmt % blind/2)  > .001 || betAmt < blind || betAmt < tableCurrentBet) {
+        console.log("bet : "+ betAmt + " | " +  "smallblind " + blind/2+ "   " +(betAmt % (blind/2)));
+        if  (isNaN(betTemp) || (betAmt % (blind/2))  > .001 || betAmt < blind || betAmt < tableCurrentBet) {
             viewControl.showMessage('System', 'Invalid bet');
             return;
         }

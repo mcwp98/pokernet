@@ -1,3 +1,7 @@
+#Install
+## Python
+Python can be downloaded to your system from https://www.python.org/
+## Node.js can be donwloaded and installed to your system from  http://nodejs.org/
 Dependencies
 	Python
 	Node.js
