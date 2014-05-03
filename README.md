@@ -31,29 +31,17 @@ then cd to the /sockets/ directory and run
 
 >npm link expres handranker socket.io
 
+## Development
+To run both server and client locally during development, a script is provided that will run both the node.js and django dev server. To use, simply cd into the project directory and run:
+> ./start.sh
 
-Dependencies
-	Python
-	Node.js
-	Django
-	Pillow (sudo it)
-		brew install libtiff libjpeg webp little-cms2
-		pip install Pillow
-python manage.py runserver
-http://127.0.0.1:8000/
+## Deployment
+Various deployment strategies exist, however, note that the current version should not be used on a production server as many security features have not been implemented.
 
-test
+### Django with WSGI
+Information on deploying the Django application on your server with WSGI can be found at https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/
 
-this is a change
+### Node.js
+Not much has to be done to deploy the node.js server. You may simply run:
+>forever node sockets/server.js
 
-
-To download:
-	git clone https://github.com/mcwp98/pokernet.git
-
-Make edits.......
-To save:
-1. git commit -a -m "update message this can be whatever ... bla bla its just a note"
-2. git push origin master
-
-npm -g install express handranker socket.io
-npm link expres handranker socket.io
