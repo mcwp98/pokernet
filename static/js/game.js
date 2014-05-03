@@ -46,7 +46,7 @@ socket.on('connect', function() {
         for (player in players) viewControl.updateOpponent(player, players[player].bank, 0, false);
         
         // emit the signal to start
-        socket.emit('start');
+        socket.emit('start', {table:tableId});
     });
 
     // submit a bet

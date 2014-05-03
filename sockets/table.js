@@ -21,6 +21,9 @@ function Table(blind, limit, buyIn, io) {
 
 // Start a game
 Table.prototype.startGame = function() {
+	if (this.numPlayers>1) {
+	
+    this.io.sockets.emit('alert', {text: "Game has begun"});
     // activate players
     this.activatePlayers();
     
@@ -41,6 +44,9 @@ Table.prototype.startGame = function() {
     
     // now that this is done, we shift to bet phase
     this.getBet();
+    } else {
+    this.io.sockets.emit('alert', {text: "NOT ENOGUH PLAYERS"});
+    }
 }
 
 // show the latest player
@@ -202,7 +208,10 @@ Table.prototype.takeBet = function(data) {
 
 // add a player to a table
 Table.prototype.addPlayer = function(player) {
-    this.players[this.numPlayers++] = player;
+	console.log(this.numPlayers);
+    this.players[this.numPlayers] = player;
+    this.numPlayers= this.numPlayers +1;
+	console.log(this.numPlayers);
 }
 
 
@@ -309,6 +318,7 @@ Table.prototype.returnActive = function() {
         }
     }
     console.log("HERERERERERERERERERERE " + active[0] + " HERERE " + active[1]);
+    //lol
     return active;
 }
         
