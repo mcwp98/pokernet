@@ -123,10 +123,16 @@ Table.prototype.takeBet = function(data) {
 	// END ROUND SCENARIO
 	//if (this.dealer+1 %numPlayers == c
 
-    // set their bet and bank
-    var bet = data.amount;
-    this.numBets++;
+console.log("----------------");
+console.log("AMOUNT : " + bet);
 console.log("CURHIGHBET" + this.currentHighestBet);
+console.log("CURRENT DEALER: " + this.dealer);
+console.log("current Player: " + this.curBetPlayer);
+console.log("Current Player Bet: " +this.players[this.curBetPlayer].currentBet);
+
+    // set their bet and bank
+    var bet = parseFloat(data.amount);
+    this.numBets++;
     if (data.check) {       // if this is a check 
         this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: false, check: true });
     } else {                // if this is a bet/fold
@@ -144,16 +150,24 @@ console.log("CURHIGHBET" + this.currentHighestBet);
             //bet = this.currentBet;
         } else { // alert to bet, and set it
             this.currentBet = bet;
-            this.currentHighestBet = bet;
             this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: false, check: false});
         }
     }
     
+		 
+console.log("----------------");
+console.log("AMOUNT : " + bet);
+console.log("CURHIGHBET" + this.currentHighestBet);
+console.log("CURRENT DEALER: " + this.dealer);
+console.log("current Player: " + this.curBetPlayer);
+console.log("Current Player Bet: " +this.players[this.curBetPlayer].currentBet);
+    this.incPlayer();
     // NOT CORRECT- FIX LATER
     // if this bet = next and weve all bet once
-    if ((this.dealer +1) % this.numPlayers == this.curBetPlayer && bet <= this.currentHighestBet + .001 ) {
+    if ((this.dealer +1) % this.numPlayers == this.curBetPlayer && this.players[((this.curBetPlayer + 1) % this.numPlayers)].currentBet <= this.currentHighestBet) {
         // reset the bet queue
         // reset current bet and player bets
+        this.currentHighestBet=this.blind;
         this.numBets = 0;
         this.currentBet = 0;
         this.largestRoundBet=-1;
@@ -176,13 +190,14 @@ console.log("CURHIGHBET" + this.currentHighestBet);
             this.showFlop();
             this.constructQueue();
         }
-        
+        this.dealer=(this.dealer+1 % this.numPlayers)
     } else {
         // repush to end, set bet, move on
         this.currentBet = data.amount;
     }
     
-    this.incPlayer();
+	if (bet>this.currentHighestBet)
+		 this.currentHighestBet = bet;
     this.io.sockets.emit('betting', {pid: this.players[this.curBetPlayer].id});
     
 }
