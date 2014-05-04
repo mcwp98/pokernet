@@ -1,0 +1,55 @@
+\#\+Pokernet The pokernet game requires python and node.\+js function. The server end uses the django framework for the general application and a node.\+js instance running to handle games and logic. Several dependencies are also required on the server, including django for python and several libraries for node.\+js
+
+\subsection*{Install}
+
+\subsubsection*{Python}
+
+Python can be downloaded and installed to your system from \href{https://www.python.org/}{\tt https\+://www.\+python.\+org/}
+
+\paragraph*{Django}
+
+Django may be installed on the server by using $>$git clone git\+://github.com/django/django.\+git django-\/trunk
+
+and then
+
+$>$sudo pip install -\/e django-\/trunk/
+
+\paragraph*{Django Application Dependencies}
+
+We require the Pillow module, to install\+: \begin{quote}
+pip install Pillow \end{quote}
+
+
+\subsubsection*{Node.\+js}
+
+Node.\+js can be downloaded and installed to your system from \href{http://nodejs.org/}{\tt http\+://nodejs.\+org/}
+
+\paragraph*{Node.\+js Applications}
+
+Pokernet uses several node.\+js applications including express, handranker, and socket.\+io. to instal them, use npm\+: $>$npm -\/g install express handranker socket.\+io
+
+then cd to the /sockets/ directory and run
+
+$>$npm link expres handranker socket.\+io
+
+\subsubsection*{lite\+S\+Q\+L Database}
+
+pokernet currently utilizes the lite\+S\+Q\+L database, to create, navigate to the application directory and run\+: $>$python manage.\+py syncdb
+
+\subsection*{Development}
+
+To run both server and client locally during development, a script is provided that will run both the node.\+js and django dev server. To use, simply cd into the project directory and run\+: \begin{quote}
+./start.sh \end{quote}
+
+
+\subsection*{Deployment}
+
+Various deployment strategies exist, however, note that the current version should not be used on a production server as many security features have not been implemented.
+
+\subsubsection*{Django with W\+S\+G\+I}
+
+Information on deploying the Django application on your server with W\+S\+G\+I can be found at \href{https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/}{\tt https\+://docs.\+djangoproject.\+com/en/dev/howto/deployment/wsgi/}
+
+\subsubsection*{Node.\+js}
+
+Not much has to be done to deploy the node.\+js server. You may simply run\+: $>$forever node sockets/server.\+js 
