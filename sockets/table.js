@@ -9,7 +9,8 @@ function Table(blind, limit, buyIn, io) {
   this.cards = [];
   this.largestRoundBet= -1;
   this.curBetPlayer=1;
-  this.currentBet = blind;
+  this.currentBet=blind;
+  this.currentHighestBet = blind;
   this.io = io;
   this.pot = 0;
   this.numPlayers = 0;
@@ -114,9 +115,6 @@ Table.prototype.issueBlind = function(type) {
     
     this.largestRoundBet=this.blind;
     this.io.sockets.emit('betting', {pid: this.players[this.curBetPlayer].id});
-    console.log("POTPOT" + this.pot);
-    console.log("POTPOT" + this.pot);
-    console.log("POTPOT" + this.pot);
 }
 
         
@@ -128,13 +126,13 @@ Table.prototype.takeBet = function(data) {
     // set their bet and bank
     var bet = data.amount;
     this.numBets++;
-    
+console.log("CURHIGHBET" + this.currentHighestBet);
     if (data.check) {       // if this is a check 
         this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: false, check: true });
     } else {                // if this is a bet/fold
             this.players[this.curBetPlayer].setBank(bet);
             this.players[this.curBetPlayer].setBet(bet);
-            this.pot += bet - this.currentBet;
+            this.pot += bet;
         if (data.fold) { // we need to fold in this bet
             this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: true, check: false });
             this.players[this.curBetPlayer].setActive(false);
@@ -143,16 +141,17 @@ Table.prototype.takeBet = function(data) {
                 return;
             }
             // set bet to last bet to see if its the end
-            bet = this.currentBet;
+            //bet = this.currentBet;
         } else { // alert to bet, and set it
             this.currentBet = bet;
-            this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: false, check:false});
+            this.currentHighestBet = bet;
+            this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: false, check: false});
         }
     }
     
     // NOT CORRECT- FIX LATER
     // if this bet = next and weve all bet once
-    if ((this.dealer +1) % this.numPlayers == this.curBetPlayer) {
+    if ((this.dealer +1) % this.numPlayers == this.curBetPlayer && bet <= this.currentHighestBet + .001 ) {
         // reset the bet queue
         // reset current bet and player bets
         this.numBets = 0;

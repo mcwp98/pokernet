@@ -46,6 +46,7 @@ socket.on('connect', function() {
         
         // emit the signal to start
         socket.emit('start', {table:tableId});
+        $('#startGame').hide();
     });
 
     // submit a bet
@@ -62,6 +63,7 @@ socket.on('connect', function() {
         
         // bad bet, try again
         console.log("bet : "+ betAmt + " | " +  "smallblind " + blind/2+ "   " +(betAmt % (blind/2)));
+        
         if  (isNaN(betTemp) || (betAmt % (blind/2))  > .001 || betAmt < blind || betAmt < tableCurrentBet) {
             viewControl.showMessage('System', 'Invalid bet');
             return;
@@ -72,7 +74,7 @@ socket.on('connect', function() {
         // set my bet and pot, display them
         myCurrentBet = betAmt;
         pot -= betTemp;
-        handPot += Number(betTemp)
+        handPot += Number(betAmt)
         viewControl.setPot(handPot);
         viewControl.setBank(pot);
         viewControl.setMyBet(myCurrentBet);
@@ -159,21 +161,24 @@ socket.on('connect', function() {
     socket.on('getPlayer', function(data) {
         // make sure you aren't getting yourself
         if (data.id == myId) return;
-        
+
         for(var i=0;i<numPlayers;i++)
         	if (players[i].name==data.name) {
 					players.splice(i, 1);
 					numPlayers--;
 				}
         // add player and update views
-        numPlayers++;
         players[numPlayers] = new oppPlayer(data.id, data.bank, data.name, (numPlayers));
         viewControl.addPlayer(numPlayers, data.name);
         viewControl.updateOpponent(numPlayers, data.bank, 0, 0);
+        
+        numPlayers++;
     });
 
     // recieve the hand
     socket.on('getHand', function(data) {
+    	
+        $('#startGame').hide();
         myCards = data;
         viewControl.showHand(myCards);
         viewControl.oppCardsHidden(numPlayers);
@@ -207,6 +212,7 @@ socket.on('connect', function() {
             allowBet=true;
             return;
         }
+        
         // its them, update bet status
         for (player in players) {
             if (players[player].id == data.pid) {
@@ -227,17 +233,17 @@ socket.on('connect', function() {
         } else {
             tableCurrentBet = data.amount;
         }
-
-        for (var i = 1; i < numPlayers+1; i++) {
+console.log("AAAAA CHECK:" +  data.check + " FOLD: " + data.fold + "NUMPLAYERS: " + numPlayers +"AMT" + data.amount);
+        for (var i = 0; i < numPlayers; i++) {
             if (players[i].id == data.player) {
                 players[i].setBet(data.amount);
                 players[i].betting = false;
                 viewControl.oppNotBetting(i);
                 if (data.check) {
-                    viewControl.showMessage('Bet', players[i].name + " has bet: " + data.amount);
+                    viewControl.showMessage('Bet', players[i].name + " has checked: ");
                 } else {
-                    handPot += Number(data.amount) - Number(players[i].bet);
-                    viewControl.showMessage('Bet', players[i].name + " has checked.");
+                    handPot += parseFloat(data.amount);
+                    viewControl.showMessage('Bet', players[i].name + " has bet" + data.amount);
                 }
             }
         }
@@ -267,7 +273,7 @@ socket.on('connect', function() {
         }
         
         // set their bet
-        for (var i = 1; i < numPlayers+1; i++) {
+        for (var i = 1; i < numPlayers; i++) {
             if (players[i].id == data.player) {
                 players[i].setBet(data.amount);
                 players[i].betting = false;
