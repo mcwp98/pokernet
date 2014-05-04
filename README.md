@@ -42,8 +42,48 @@ To run both server and client locally during development, a script is provided t
 ## Deployment
 Various deployment strategies exist, however, note that the current version should not be used on a production server as many security features have not been implemented.
 
+### Port and Address Configuration
+There are several steps required to ensure that the server/client will communicate.
+
+#### Port configuration
+On line 4 of /sockets/server.js, edit:
+> , server = app.listen(8081)
+
+On line 23 of /static/js/game.js
+> var socket = io.connect('127.0.0.1:8081');
+
+and on line 157 of /tables/templates/game.html:
+><script src="http://127.0.0.1:8081/socket.io/socket.io.js"></script>
+
+Localhost should be replaced with the server address. Any open port can be utilized
+
 ### Django with WSGI
 Information on deploying the Django application on your server with WSGI can be found at https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/
+
+You may need to setup your apache Virtual Host file similarly:
+>DocumentRoot /var/www/hyobyun.com
+
+>ServerName Poker
+
+>WSGIScriptAlias / /var/djangoProjects/pokernet/pokernet/wsgi.py
+
+>Alias /static /var/djangoProjects/pokernet/static/
+
+><Directory "/var/www/hyobyun.com">
+
+>allow from all
+
+>Options +Indexes
+
+><Files wsgi.py>
+
+>Order deny,allow
+
+>Allow from all
+
+></Files>
+
+></Directory>
 
 ### Node.js
 Not much has to be done to deploy the node.js server. You may simply run:

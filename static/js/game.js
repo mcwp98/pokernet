@@ -19,15 +19,7 @@ var limit;
 	$('#checkSend').hide();
 	$('#betSend').hide();
 	$('#betAmt').hide();
-/*
 
-   
-    var tableId    = '{{ table }}';
-    var playerName = '{{ username }}';
-    var moneyToUse = '{{ amountPlay}}';
-    var tableLimit = '{{tableLimit}};'
-    var tableBlind = '{{tableBlind}}';
-    */
 var socket = io.connect('127.0.0.1:8081');
 socket.on('connect', function() {
     socket.emit('connectToServer', {name: playerName, money: moneyToUse,table: tableId,tableLimit:tableLimit,tableBlind:tableBlind});

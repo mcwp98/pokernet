@@ -18,18 +18,23 @@ def tables(request):
 
 	return render_to_response('tables.html', args)
 
+# Leave table REST interface
 @csrf_exempt
 def leaveTable(request):
 	args = RequestContext(request)
 	if request.method == 'POST':
+	
+		# Parse POST variables
 		userid = request.POST['userid'];
 		tableid = request.POST['tableid'];
 		pot = request.POST['pot'];
 		
+		#update user balance
 		user = UserStats.objects.get(user=userid)
 		user.balance = user.balance+float(pot)
 		user.save()
 		
+		#Change number of tables
 		table = Table.objects.get(id=tableid)
 		table.currentUsers = table.currentUsers-1
 		table.save()
@@ -41,6 +46,8 @@ def joinTable(request, tableID=1):
     # make sure were authenticated
 	if not request.user.is_authenticated():
 		return redirect('/users/login/')
+		
+	#Update number of users
 	table = Table.objects.get(id=tableID)
 	table.currentUsers = table.currentUsers +1
 	table.save()
@@ -48,6 +55,7 @@ def joinTable(request, tableID=1):
 	args = RequestContext(request)
 	args['tables'] = table
 
+	# Add User
 	current_user = request.user
 
 	args['table'] = table.id
@@ -56,16 +64,12 @@ def joinTable(request, tableID=1):
 	args['tableLimit'] = table.tableLimit
 	args['tableBlind'] = table.tableBlind
 	
-	## AMOUNT PLAY
+	## Inject amount of player $$ into game
 	args['amountPlay'] = table.tableBlind*25
 	UserStats_t = UserStats.objects.get(user=request.user)
 	UserStats_t.balance = UserStats_t.balance-args['amountPlay']
 	UserStats_t.save()
 	
-	
-	
-	# args['table'] = table
-
 	return render_to_response('game.html', args)
 
 
