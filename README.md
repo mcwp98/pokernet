@@ -45,7 +45,6 @@ Various deployment strategies exist, however, note that the current version shou
 ### Port and Address Configuration
 There are several steps required to ensure that the server/client will communicate.
 
-#### Port configuration
 On line 4 of /sockets/server.js, edit:
 > , server = app.listen(8081)
 

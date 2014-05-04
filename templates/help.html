@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block css %}
-<link href="{% static "css/index.css" %}" rel="stylesheet">
+<link href="{% static "assets/css/index.css" %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -23,93 +23,93 @@
 <h3>Hand Ranks</h3>
 <p><b>Straight Flush: </b>Five cards in sequence of the same suit</p>
 <div class="row">
-	<img src="/static/img/cards/2d.png">
-	<img src="/static/img/cards/3d.png">
-	<img src="/static/img/cards/4d.png">
-	<img src="/static/img/cards/5d.png">
-	<img src="/static/img/cards/6d.png">
+	<img src="{% static "assets/img/cards/2d.png" %}">
+	<img src="{% static "assets/img/cards/3d.png" %}">
+	<img src="{% static "assets/img/cards/4d.png" %}">
+	<img src="{% static "assets/img/cards/5d.png" %}">
+	<img src="{% static "assets/img/cards/6d.png" %}">
 </div>
 <p>In the event of a tie: Highest rank at the top of the sequence wins.</p>
 <p>The best possible straight flush is known as a <b>royal flush</b>, which consists of the ace, king, queen, jack and ten of a suit. A royal flush is an unbeatable hand.</p>
 
 <p><b>Four of a Kind: </b>Four cards of the same rank, and one side card or ‘kicker’.</p>
 <div class="row">
-	<img src="/static/img/cards/2d.png">
-	<img src="/static/img/cards/2c.png">
-	<img src="/static/img/cards/2h.png">
-	<img src="/static/img/cards/2s.png">
-	<img src="/static/img/cards/6d.png">
+	<img src="{% static "assets/img/cards/2d.png" %}">
+	<img src="{% static "assets/img/cards/2c.png" %}">
+	<img src="{% static "assets/img/cards/2h.png" %}">
+	<img src="{% static "assets/img/cards/2s.png" %}">
+	<img src="{% static "assets/img/cards/6d.png" %}">
 </div>
 <p>In the event of a tie: Highest four of a kind wins. In community card games where players have the same four of a kind, the highest fifth side card ('kicker') wins.</p>
 
 <p><b>Full House: </b>Three cards of the same rank, and two cards of a different, matching rank.</p>
 <div class="row">
-	<img src="/static/img/cards/2d.png">
-	<img src="/static/img/cards/2c.png">
-	<img src="/static/img/cards/2h.png">
-	<img src="/static/img/cards/6c.png">
-	<img src="/static/img/cards/6d.png">
+	<img src="{% static "assets/img/cards/2d.png" %}">
+	<img src="{% static "assets/img/cards/2c.png" %}">
+	<img src="{% static "assets/img/cards/2h.png" %}">
+	<img src="{% static "assets/img/cards/6c.png" %}">
+	<img src="{% static "assets/img/cards/6d.png" %}">
 </div>
 <p>In the event of a tie: Highest three matching cards wins the pot. In community card games where players have the same three matching cards, the highest value of the two matching cards wins.</p>
 
 <p><b>Flush: </b>Five cards of the same suit.</p>
 <div class="row">
-	<img src="/static/img/cards/2d.png">
-	<img src="/static/img/cards/4d.png">
-	<img src="/static/img/cards/8d.png">
-	<img src="/static/img/cards/Qd.png">
-	<img src="/static/img/cards/6d.png">
+	<img src="{% static "assets/img/cards/2d.png" %}">
+	<img src="{% static "assets/img/cards/4d.png" %}">
+	<img src="{% static "assets/img/cards/8d.png" %}">
+	<img src="{% static "assets/img/cards/Qd.png" %}">
+	<img src="{% static "assets/img/cards/6d.png" %}">
 </div>
 <p>In the event of a tie: The player holding the highest ranked card wins. If necessary, the second-highest, third-highest, fourth-highest, and fifth-highest cards can be used to break the tie. If all five cards are the same ranks, the pot is split. The suit itself is never used to break a tie in poker.</p>
 
 <p><b>Straight: </b>Five cards in sequence.</p>
 <div class="row">
-	<img src="/static/img/cards/2d.png">
-	<img src="/static/img/cards/3c.png">
-	<img src="/static/img/cards/4d.png">
-	<img src="/static/img/cards/5h.png">
-	<img src="/static/img/cards/6s.png">
+	<img src="{% static "assets/img/cards/2d.png" %}">
+	<img src="{% static "assets/img/cards/3c.png" %}">
+	<img src="{% static "assets/img/cards/4d.png" %}">
+	<img src="{% static "assets/img/cards/5h.png" %}">
+	<img src="{% static "assets/img/cards/6s.png" %}">
 </div>
 <p>In the event of a tie: Highest ranking card at the top of the sequence wins.</p>
 <p>Note: The Ace may be used at the top or bottom of the sequence, and is the only card which can act in this manner. A,K,Q,J,T is the highest (Ace high) straight; 5,4,3,2,A is the lowest (Five high) straight.</p>
 
 <p><b>Three of a Kind: </b>Three cards of the same rank, and two unrelated side cards.</p>
 <div class="row">
-	<img src="/static/img/cards/2d.png">
-	<img src="/static/img/cards/2c.png">
-	<img src="/static/img/cards/2h.png">
-	<img src="/static/img/cards/5h.png">
-	<img src="/static/img/cards/6s.png">
+	<img src="{% static "assets/img/cards/2d.png" %}">
+	<img src="{% static "assets/img/cards/2c.png" %}">
+	<img src="{% static "assets/img/cards/2h.png" %}">
+	<img src="{% static "assets/img/cards/5h.png" %}">
+	<img src="{% static "assets/img/cards/6s.png" %}">
 </div>
 <p>In the event of a tie: Highest ranking three of a kind wins. In community card games where players have the same three of a kind, the highest side card, and if necessary, the second-highest side card wins.</p>
 
 <p><b>Two Pair: </b>Two cards of a matching rank, another two cards of a different matching rank, and one side card.</p>
 <div class="row">
-	<img src="/static/img/cards/2d.png">
-	<img src="/static/img/cards/2c.png">
-	<img src="/static/img/cards/Th.png">
-	<img src="/static/img/cards/Ts.png">
-	<img src="/static/img/cards/6s.png">
+	<img src="{% static "assets/img/cards/2d.png" %}">
+	<img src="{% static "assets/img/cards/2c.png" %}">
+	<img src="{% static "assets/img/cards/Th.png" %}">
+	<img src="{% static "assets/img/cards/Ts.png" %}">
+	<img src="{% static "assets/img/cards/6s.png" %}">
 </div>
 <p>In the event of a tie: Highest pair wins. If players have the same highest pair, highest second pair wins. If both players have two identical pairs, highest side card wins.</p>
 
 <p><b>One Pair: </b>Two cards of a matching rank, and three unrelated side cards.</p>
 <div class="row">
-	<img src="/static/img/cards/2d.png">
-	<img src="/static/img/cards/2c.png">
-	<img src="/static/img/cards/Th.png">
-	<img src="/static/img/cards/Js.png">
-	<img src="/static/img/cards/6s.png">
+	<img src="{% static "assets/img/cards/2d.png" %}">
+	<img src="{% static "assets/img/cards/2c.png" %}">
+	<img src="{% static "assets/img/cards/Th.png" %}">
+	<img src="{% static "assets/img/cards/Js.png" %}">
+	<img src="{% static "assets/img/cards/6s.png" %}">
 </div>
 <p>In the event of a tie: Highest pair wins. If players have the same pair, the highest side card wins, and if necessary, the second-highest and third-highest side card can be used to break the tie.</p>
 
 <p><b>High Card: </b>Any hand that does not qualify under a category listed above.</p>
 <div class="row">
-	<img src="/static/img/cards/Ah.png">
-	<img src="/static/img/cards/Tc.png">
-	<img src="/static/img/cards/9h.png">
-	<img src="/static/img/cards/6s.png">
-	<img src="/static/img/cards/3c.png">
+	<img src="{% static "assets/img/cards/Ah.png" %}">
+	<img src="{% static "assets/img/cards/Tc.png" %}">
+	<img src="{% static "assets/img/cards/9h.png" %}">
+	<img src="{% static "assets/img/cards/6s.png" %}">
+	<img src="{% static "assets/img/cards/3c.png" %}">
 </div>
 <p>In the event of a tie: Highest card wins, and if necessary, the second-highest, third-highest, fourth-highest and smallest card can be used to break the tie.</p>
 
