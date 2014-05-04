@@ -29,7 +29,7 @@ Pokernet uses several node.js applications including express, handranker, and so
 
 then cd to the /sockets/ directory and run 
 
->npm link expres handranker socket.io
+>npm link express handranker socket.io
 
 ### liteSQL Database
 pokernet currently utilizes the liteSQL database, to create, navigate to the application directory and run:
