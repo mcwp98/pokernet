@@ -286,7 +286,10 @@ Table.prototype.endGame = function() {
     
     // Find winner
     // winner by folds
-    if (active.length == 1) winner = active[0];
+    if (active.length == 1) {
+    	winner = active[0];
+    	console.log("WINNER IS FOLD");
+    	 }
     else winner = this.findWinner(active);    // else find the winner
 
     var winIndex = this.getPlayer(winner);
@@ -302,7 +305,7 @@ Table.prototype.endGame = function() {
     for (player in this.players) {
         this.players[player].setBetZero();
         this.players[player].clearHand('');
-        
+        this.isActive=true;
     }
     
     // clear the table current bet, pots, cards, and iterate dealer
@@ -330,7 +333,7 @@ Table.prototype.returnActive = function() {
     var active = [];
     var count = 0;
     for (player in this.players) {
-        if (this.players[player].getActive() == true) {
+        if (this.players[player].getActive()) {
             active[count++] = this.players[player].id;
         }
     }
