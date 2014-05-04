@@ -45,6 +45,20 @@ Various deployment strategies exist, however, note that the current version shou
 ### Django with WSGI
 Information on deploying the Django application on your server with WSGI can be found at https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/
 
+You may need to setup your apache Virtual Host file similarly:
+>DocumentRoot /var/www/hyobyun.com
+>ServerName Poker
+>WSGIScriptAlias / /var/djangoProjects/pokernet/pokernet/wsgi.py
+>Alias /static /var/djangoProjects/pokernet/static/
+><Directory "/var/www/hyobyun.com">
+>allow from all
+>Options +Indexes
+><Files wsgi.py>
+>Order deny,allow
+>Allow from all
+></Files>
+></Directory>
+
 ### Node.js
 Not much has to be done to deploy the node.js server. You may simply run:
 >forever node sockets/server.js
