@@ -53,7 +53,6 @@ socket.on('connect', function() {
         
         // emit the signal to start
         socket.emit('start', {table:tableId});
-        $('#startGame').hide();
     });
 
     // submit a bet
@@ -220,6 +219,7 @@ socket.on('connect', function() {
     
     // someone is betting
     socket.on('betting', function(data) {
+        $('#startGame').hide();
         //its us, show the bet input
         if (data.pid == myId) {
             viewControl.showBet(handPot, tableCurrentBet, blind, limit);
