@@ -1,11 +1,7 @@
 from django.db import models
 from django import forms
-# Create your models here.
 
-# Table Types:
-# 1 - Texas hold em
-# 2 - blackjack ??
-
+# Table Model
 class Table(models.Model):
 
     currentUsers = models.IntegerField()
@@ -32,6 +28,7 @@ class Table(models.Model):
         self.currentUsers = 0
         return
 
+# Form for creating new talbles
 class NewTableForm(forms.Form):
 	tableLimit = forms.FloatField()
 	tableBlind = forms.FloatField()
