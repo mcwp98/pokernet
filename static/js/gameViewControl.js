@@ -5,6 +5,7 @@ function viewControl() {}
 /****** Table ***********/
 // shows the cards
 viewControl.prototype.showCard = function(position, card) {
+     $('#card' + position).show();
     $('#card' + position).attr('src', "/static/assets/img/cards/" + card + '.png');
 }
 
@@ -36,6 +37,8 @@ viewControl.prototype.hideCards = function(size) {
     // hide the board
     for (i=1; i <= 5; i++) {
         $('#card' + i).attr('src', '');
+        $('#card' + i).hide();
+        console.log("HIDE CARD " +i);
     }
     
 }

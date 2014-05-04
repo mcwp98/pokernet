@@ -17,6 +17,7 @@ function Table(blind, limit, buyIn, io, id) {
   this.numPlayers = 0;
   this.dealer = 1;
   this.numBets = 0;
+  this.everyonBet=false;
 }
 
 
@@ -45,7 +46,10 @@ Table.prototype.startGame = function(data) {
     }
 }
 Table.prototype.incPlayer=function(){
-	this.curBetPlayer = (this.curBetPlayer+1) % this.numPlayers;
+	do {
+		this.curBetPlayer = (this.curBetPlayer+1) % this.numPlayers;
+		console.log("looking");
+	} while(!this.players[this.curBetPlayer].isActive)
 	console.log("CURRENT PLAYER " + this.curBetPlayer);
 }
 // show the latest player
@@ -126,13 +130,6 @@ Table.prototype.takeBet = function(data) {
 	// END ROUND SCENARIO
 	//if (this.dealer+1 %numPlayers == c
 
-console.log("----------------");
-console.log("AMOUNT : " + bet);
-console.log("CURHIGHBET" + this.currentHighestBet);
-console.log("CURRENT DEALER: " + this.dealer);
-console.log("current Player: " + this.curBetPlayer);
-console.log("Current Player Bet: " +this.players[this.curBetPlayer].currentBet);
-
     // set their bet and bank
     var bet = parseFloat(data.amount);
     this.numBets++;
@@ -158,16 +155,13 @@ console.log("Current Player Bet: " +this.players[this.curBetPlayer].currentBet);
     }
     
 		 
+    
     this.incPlayer();
-console.log("----------------");
-console.log("AMOUNT : " + bet);
-console.log("CURHIGHBET" + this.currentHighestBet);
-console.log("CURRENT DEALER: " + this.dealer);
-console.log("current Player: " + this.curBetPlayer + "??==?? " + (this.dealer+1) % this.numPlayers);
-console.log("Current Player Bet: " +this.players[this.curBetPlayer].currentBet);
-    // NOT CORRECT- FIX LATER
+    
+    if((this.dealer+1) % this.numPlayers==this.curBetPlayer)
+    	this.everyonBet=true;
     // if this bet = next and weve all bet once
-    if ((this.dealer+1) % this.numPlayers == this.curBetPlayer && this.players[((this.curBetPlayer + 1) % this.numPlayers)].currentBet <= this.currentHighestBet) {
+    if (this.everyonBet && (this.dealer+1) % this.numPlayers == this.curBetPlayer && this.players[((this.curBetPlayer + 1) % this.numPlayers)].currentBet <= this.currentHighestBet) {
         // reset the bet queue
         // reset current bet and player bets
         this.currentHighestBet=this.blind;
@@ -311,6 +305,7 @@ Table.prototype.endGame = function() {
     // clear the table current bet, pots, cards, and iterate dealer
     this.pot = 0;
     this.cards = [];
+    this.numBets=0;
     this.currentBet = this.blind;
     this.dealer = (this.dealer+1 ) % (this.numPlayers);
 console.log("(this.dealer+1 ): " + (this.dealer+1 ) + "(this.numPlayers) " + (this.numPlayers));

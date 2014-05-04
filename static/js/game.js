@@ -134,7 +134,7 @@ socket.on('connect', function() {
             viewControl.setBank(pot);
             viewControl.showMessage('Winner', 'You have won the pot of ' + handPot);
         } else {
-            viewControl.showMessage('Winner', 'You have lost the pot of ' + handPot);
+            viewControl.showMessage('Lost', 'You have lost the pot of ' + handPot);
         }
             
         // double check that the board is clear
@@ -168,19 +168,26 @@ socket.on('connect', function() {
     socket.on('getPlayer', function(data) {
         // make sure you aren't getting yourself
         if (data.id == myId) return;
-
+		var dup=false;
         for(var i=0;i<numPlayers;i++)
         	if (players[i].name==data.name) {
-					players.splice(i, 1);
-					numPlayers--;
+					
+        			players[i] = new oppPlayer(data.id, data.bank, data.name, (numPlayers));
+        			console.log(data.name + " " +numPlayers);
+        			viewControl.addPlayer(i, data.name);
+        			viewControl.updateOpponent(i, data.bank, 0, 0);
+					dup=true;
+					break;
 				}
         // add player and update views
+        if (!dup) {
         players[numPlayers] = new oppPlayer(data.id, data.bank, data.name, (numPlayers));
         console.log(data.name + " " +numPlayers);
         viewControl.addPlayer(numPlayers, data.name);
         viewControl.updateOpponent(numPlayers, data.bank, 0, 0);
         
         numPlayers++;
+        }
     });
 
     // recieve the hand

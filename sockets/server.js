@@ -68,6 +68,12 @@ io.sockets.on('connection', function (socket) {
       io.sockets.emit('chat', data);
   });
   
-});
+  //On Disconnect
+  socket.on('disconnect', function (data) {
+      console.log("DC");
+      console.log(data);
+  });
 
+
+});
 
