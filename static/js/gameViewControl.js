@@ -42,7 +42,8 @@ viewControl.prototype.hideCards = function(size) {
 
 // adds a player to the table
 viewControl.prototype.addPlayer = function(label, name) {
-    $('#op' + label + '-name').text(name);
+	console.log('#op' + label + '-name');
+    $('#op' + (label+1) + '-name').text(name);
 }
 
 viewControl.prototype.oppCardsHidden = function(size) {
@@ -86,12 +87,21 @@ viewControl.prototype.setTableBet = function(amt) {
 viewControl.prototype.showBet = function(pot, currentBet, blind, limit) {
     $('#betBox').show();
     $('#betting').show();
+    
+	$('#foldSend').show();
+	$('#checkSend').show();
+	$('#betSend').show();
+	$('#betAmt').show();
 }
 
 // close betting
 viewControl.prototype.hideBet = function() {
     $('#betBox').hide();
     $('#betting').hide();
+	$('#foldSend').hide();
+	$('#checkSend').hide();
+	$('#betSend').hide();
+	$('#betAmt').hide();
 }
 
 // set the my current bet

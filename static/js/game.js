@@ -12,6 +12,13 @@ var tableCards = [];
 var pot = moneyToUse;
 var handPot = 0;
 var limit;
+
+    $('#betBox').hide();
+    $('#betting').hide();
+	$('#foldSend').hide();
+	$('#checkSend').hide();
+	$('#betSend').hide();
+	$('#betAmt').hide();
 /*
 
    
@@ -150,7 +157,7 @@ socket.on('connect', function() {
     
     // set my player id
     socket.on('pid', function(data) {
-    	if(tableId != data.table)
+    	if(Number(tableId) != Number(data.table))
     		return;
         myId = data.pid;
         blind = data.blind;
@@ -169,6 +176,7 @@ socket.on('connect', function() {
 				}
         // add player and update views
         players[numPlayers] = new oppPlayer(data.id, data.bank, data.name, (numPlayers));
+        console.log(data.name + " " +numPlayers);
         viewControl.addPlayer(numPlayers, data.name);
         viewControl.updateOpponent(numPlayers, data.bank, 0, 0);
         
@@ -177,7 +185,6 @@ socket.on('connect', function() {
 
     // recieve the hand
     socket.on('getHand', function(data) {
-    	
         $('#startGame').hide();
         myCards = data;
         viewControl.showHand(myCards);

@@ -29,7 +29,7 @@ io.sockets.on('connection', function (socket) {
     	console.log("TABLE EXISTS");
     } else {
     	console.log("TABLE DOES NOT EXIST- CREATE TABLE");
-    	MapofTables[data.table] = new Table(data.tableBlind,data.tableLimit,data.moneyToUse,io);
+    	MapofTables[data.table] = new Table(data.tableBlind,data.tableLimit,data.moneyToUse,io,Number(data.table));
     }
     	console.log(MapofTables);
     var curTable= MapofTables[data.table]
@@ -55,7 +55,7 @@ io.sockets.on('connection', function (socket) {
   // start the game
   socket.on('start', function(data) {
     curTable=MapofTables[data.table];
-    curTable.startGame();
+    curTable.startGame(data);
   });
   
   // route bets into the table

@@ -1,7 +1,8 @@
 var Deck = require('./deck.js');
 var Ranker = require('handranker');
 
-function Table(blind, limit, buyIn, io) {
+function Table(blind, limit, buyIn, io, id) {
+  this.id=id;
   this.maxPlayers = 7;
   this.blind = blind;
   this.limit = limit;
@@ -14,14 +15,14 @@ function Table(blind, limit, buyIn, io) {
   this.io = io;
   this.pot = 0;
   this.numPlayers = 0;
-  this.dealer = 0;
+  this.dealer = 1;
   this.numBets = 0;
 }
 
 
 
 // Start a game
-Table.prototype.startGame = function() {
+Table.prototype.startGame = function(data) {
 	if (this.numPlayers>1) {
 	
     this.io.sockets.emit('alert', {text: "Game has begun"});
@@ -40,7 +41,7 @@ Table.prototype.startGame = function() {
     this.issueBlind();
     
     } else {
-    	this.io.sockets.emit('alert', {text: "NOT ENOGUH PLAYERS"});
+    	this.io.sockets.emit('alert', { table: this.id ,text: "NOT ENOGUH PLAYERS"});
     }
 }
 Table.prototype.incPlayer=function(){
@@ -52,7 +53,8 @@ Table.prototype.showPlayer = function(pid) {
     for (player in this.players) {
         if (this.players[player].id == pid) {
             this.io.sockets.emit('getPlayer', 
-                            { id: this.players[player].id
+                            { table: this.id 
+                            , id: this.players[player].id
                             , bank: this.players[player].bank
                             , name: this.players[player].name });
         }
@@ -63,7 +65,8 @@ Table.prototype.showPlayer = function(pid) {
 Table.prototype.showPlayers = function(pid) {
     for (i = 0; i < this.numPlayers; i++) { 
         this.io.sockets.socket(pid).emit('getPlayer', 
-                                    { id: this.players[i].id
+                                    { table: this.id 
+                                    , id: this.players[i].id
                                     , bank: this.players[i].bank
                                     , name: this.players[i].name });
     }
@@ -101,20 +104,20 @@ Table.prototype.issueBlind = function(type) {
 	//Small
     this.players[this.curBetPlayer].setBet(this.blind/2);
     this.players[this.curBetPlayer].setBank(this.blind/2);
-    this.io.sockets.emit('blind', { amount: this.blind/2, player: this.players[this.curBetPlayer].id });
+    this.io.sockets.emit('blind', {  table: this.id ,amount: this.blind/2, player: this.players[this.curBetPlayer].id });
     this.incPlayer();
     
     //Small
     this.players[this.curBetPlayer % this.numPlayers].setBet(this.blind);
     this.players[this.curBetPlayer % this.numPlayers].setBank(this.blind);
-    this.io.sockets.emit('blind', { amount: this.blind, player: this.players[this.curBetPlayer].id });
+    this.io.sockets.emit('blind', {  table: this.id ,amount: this.blind, player: this.players[this.curBetPlayer].id });
     this.incPlayer();
     
     //Update Pot
     this.pot = Number(Number(this.pot)+Number(this.blind)*1.5);
     
     this.largestRoundBet=this.blind;
-    this.io.sockets.emit('betting', {pid: this.players[this.curBetPlayer].id});
+    this.io.sockets.emit('betting', { table: this.id ,pid: this.players[this.curBetPlayer].id});
 }
 
         
@@ -134,13 +137,13 @@ console.log("Current Player Bet: " +this.players[this.curBetPlayer].currentBet);
     var bet = parseFloat(data.amount);
     this.numBets++;
     if (data.check) {       // if this is a check 
-        this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: false, check: true });
+        this.io.sockets.emit('bet', { table: this.id ,player: data.player, amount: data.amount, fold: false, check: true });
     } else {                // if this is a bet/fold
             this.players[this.curBetPlayer].setBank(bet);
             this.players[this.curBetPlayer].setBet(bet);
             this.pot += bet;
         if (data.fold) { // we need to fold in this bet
-            this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: true, check: false });
+            this.io.sockets.emit('bet', { table: this.id ,player: data.player, amount: data.amount, fold: true, check: false });
             this.players[this.curBetPlayer].setActive(false);
             if (this.returnActive().length == 1) {
                 this.endGame();
@@ -150,21 +153,21 @@ console.log("Current Player Bet: " +this.players[this.curBetPlayer].currentBet);
             //bet = this.currentBet;
         } else { // alert to bet, and set it
             this.currentBet = bet;
-            this.io.sockets.emit('bet', {player: data.player, amount: data.amount, fold: false, check: false});
+            this.io.sockets.emit('bet', { table: this.id ,player: data.player, amount: data.amount, fold: false, check: false});
         }
     }
     
 		 
+    this.incPlayer();
 console.log("----------------");
 console.log("AMOUNT : " + bet);
 console.log("CURHIGHBET" + this.currentHighestBet);
 console.log("CURRENT DEALER: " + this.dealer);
-console.log("current Player: " + this.curBetPlayer);
+console.log("current Player: " + this.curBetPlayer + "??==?? " + (this.dealer+1) % this.numPlayers);
 console.log("Current Player Bet: " +this.players[this.curBetPlayer].currentBet);
-    this.incPlayer();
     // NOT CORRECT- FIX LATER
     // if this bet = next and weve all bet once
-    if ((this.dealer +1) % this.numPlayers == this.curBetPlayer && this.players[((this.curBetPlayer + 1) % this.numPlayers)].currentBet <= this.currentHighestBet) {
+    if ((this.dealer+1) % this.numPlayers == this.curBetPlayer && this.players[((this.curBetPlayer + 1) % this.numPlayers)].currentBet <= this.currentHighestBet) {
         // reset the bet queue
         // reset current bet and player bets
         this.currentHighestBet=this.blind;
@@ -190,15 +193,15 @@ console.log("Current Player Bet: " +this.players[this.curBetPlayer].currentBet);
             this.showFlop();
             this.constructQueue();
         }
-        this.dealer=(this.dealer+1 % this.numPlayers)
     } else {
         // repush to end, set bet, move on
         this.currentBet = data.amount;
+        
     }
     
 	if (bet>this.currentHighestBet)
 		 this.currentHighestBet = bet;
-    this.io.sockets.emit('betting', {pid: this.players[this.curBetPlayer].id});
+    this.io.sockets.emit('betting', { table: this.id ,pid: this.players[this.curBetPlayer].id});
     
 }
 
@@ -255,21 +258,21 @@ Table.prototype.getBlind = function() {
 
 Table.prototype.showFlop = function() {
     this.cards[0] = this.deck.drawCard();
-    this.io.sockets.emit('card', {card:this.cards[0]});
+    this.io.sockets.emit('card', { table: this.id ,card:this.cards[0]});
     this.cards[1] = this.deck.drawCard();
-    this.io.sockets.emit('card', {card:this.cards[1]});
+    this.io.sockets.emit('card', { table: this.id ,card:this.cards[1]});
     this.cards[2] = this.deck.drawCard();
-    this.io.sockets.emit('card', {card:this.cards[2]});
+    this.io.sockets.emit('card', { table: this.id ,card:this.cards[2]});
 }
 
 Table.prototype.showTurn = function() {
     this.cards[3] = this.deck.drawCard();
-    this.io.sockets.emit('card', {card:this.cards[3]});
+    this.io.sockets.emit('card', { table: this.id ,card:this.cards[3]});
 }
 
 Table.prototype.showRiver = function() {
     this.cards[4] = this.deck.drawCard();
-    this.io.sockets.emit('card', {card:this.cards[4]});
+    this.io.sockets.emit('card', { table: this.id ,card:this.cards[4]});
 
 }
 
@@ -289,8 +292,8 @@ Table.prototype.endGame = function() {
     var winIndex = this.getPlayer(winner);
     
     // let the table know of the winner
-    this.io.sockets.emit('winner', {pid: winner});
-    this.io.sockets.emit('alert', {text: 'The winner is ' + this.players[winIndex].getName()});
+    this.io.sockets.emit('winner', { table: this.id ,pid: winner});
+    this.io.sockets.emit('alert', { table: this.id ,text: 'The winner is ' + this.players[winIndex].getName()});
     
     // add the current pot to the winner's pot
     this.players[winIndex].addBank(this.pot);
@@ -306,7 +309,8 @@ Table.prototype.endGame = function() {
     this.pot = 0;
     this.cards = [];
     this.currentBet = this.blind;
-    this.dealer = this.dealer+1%this.numPlayers;
+    this.dealer = (this.dealer+1 ) % (this.numPlayers);
+console.log("(this.dealer+1 ): " + (this.dealer+1 ) + "(this.numPlayers) " + (this.numPlayers));
 }
 
 Table.prototype.findWinner = function(active) {
