@@ -6,146 +6,144 @@
 {% endblock %}
 
 {% block content %}
-
-<div class="row"> <!-- players 2-5 -->
-    <div class="large-3 columns baseContainer" style="border: 1px solid black" id="op2"><!-- Player 2 -->
-        <div class="cardContainer">
-            <div class="info">
-                <p style="display:inline"><div id="op2-name" style="display:inline">NONE</div></p>
-                <p style="display:inline">Bank: <div id="op2-bank" style="display:inline"></div></p>
-                <p style="display:inline">Bet: <div id="op2-bet" style="display:inline"></div></p>
-            </div>
-            <div class="cards">
-                <img class="card" id="op2-card1"/>
-                <img class="card" id="op2-card2" />
-            </div>
-        </div>
-    </div>
-    <div class="large-3 columns baseContainer" style="border: 1px solid black" id="op3"><!-- Player 3 -->
-        <div class="cardContainer">
-            <div class="info">
-                <p style="display:inline"><div id="op3-name" style="display:inline">NONE</div></p>
-                <p style="display:inline">Bank: <div id="op3-bank" style="display:inline"></div></p>
-                <p style="display:inline">Bet: <div id="op3-bet" style="display:inline"></div></p>
-            </div>
-            <div class="cards">
-                <img class="card" id="op3-card1" />
-                <img class="card" id="op3-card2" />
-            </div>
-        </div>
-    </div>
-    <div class="large-3 columns baseContainer" style="border: 1px solid black" id="op4"><!-- Player 4 -->
-        <div class="cardContainer">
-            <div class="info">
-                <p style="display:inline"><div id="op4-name" style="display:inline">NONE</div></p>
-                <p style="display:inline">Bank: <div id="op4-bank" style="display:inline"></div></p>
-                <p style="display:inline">Bet: <div id="op4-bet" style="display:inline"></div></p>
-            </div>
-            <div class="cards">
-                <img class="card" id="op4-card1" />
-                <img class="card" id="op4-card2" />
-            </div>
-        </div>
-    </div>
-    <div class="large-3 columns baseContainer" style="border: 1px solid black" id="op5"><!-- Player 5 -->
-        <div class="cardContainer">
-            <div class="info">
-            <div class="info">
-                <p style="display:inline"><div id="op5-name" style="display:inline">NONE</div></p>
-                <p style="display:inline">Bank: <div id="op5-bank" style="display:inline"></div></p>
-                <p style="display:inline">Bet: <div id="op5-bet" style="display:inline"></div></p>
-            </div>
-            </div>
-            <div class="cards">
-                <img class="card" id="op5-card1" />
-                <img class="card" id="op5-card2" />
-            </div>
-        </div>
-    </div>
+<div class="baseContainer">
+	<div class="row"> <!-- players 2-5 -->
+    	<div class="large-3 columns" id="op2"><!-- Player 2 -->
+        	<div class="cardContainer">
+            	<div class="info">
+                	<p style="display:inline"><div id="op2-name" style="display:inline">NONE</div></p>
+                	<p style="display:inline">Bank: <div id="op2-bank" style="display:inline"></div></p>
+                	<p style="display:inline">Bet: <div id="op2-bet" style="display:inline"></div></p>
+            	</div>
+            	<div class="cards">
+            	    <img class="card" id="op2-card1"/>
+            	    <img class="card" id="op2-card2" />
+            	</div>
+	        </div>
+	    </div>
+	    <div class="large-3 columns" id="op3"><!-- Player 3 -->
+	        <div class="cardContainer">
+	            <div class="info">
+	                <p style="display:inline"><div id="op3-name" style="display:inline">NONE</div></p>
+	                <p style="display:inline">Bank: <div id="op3-bank" style="display:inline"></div></p>
+	                <p style="display:inline">Bet: <div id="op3-bet" style="display:inline"></div></p>
+	            </div>
+	            <div class="cards">
+    	            <img class="card" id="op3-card1" />
+        	        <img class="card" id="op3-card2" />
+        	    </div>
+        	</div>
+    	</div>
+   		<div class="large-3 columns" id="op4"><!-- Player 4 -->
+        	<div class="cardContainer">
+            	<div class="info">
+                	<p style="display:inline"><div id="op4-name" style="display:inline">NONE</div></p>
+                	<p style="display:inline">Bank: <div id="op4-bank" style="display:inline"></div></p>
+                	<p style="display:inline">Bet: <div id="op4-bet" style="display:inline"></div></p>
+            	</div>
+            	<div class="cards">
+            	    <img class="card" id="op4-card1" />
+            	    <img class="card" id="op4-card2" />
+            	</div>
+        	</div>
+    	</div>
+    	<div class="large-3 columns" id="op5"><!-- Player 5 -->
+    	    <div class="cardContainer">
+    	        <div class="info">
+        	        <p style="display:inline"><div id="op5-name" style="display:inline">NONE</div></p>
+            	    <p style="display:inline">Bank: <div id="op5-bank" style="display:inline"></div></p>
+                	<p style="display:inline">Bet: <div id="op5-bet" style="display:inline"></div></p>
+            	</div>
+            	<div class="cards">
+            	    <img class="card" id="op5-card1" />
+            	    <img class="card" id="op5-card2" />
+            	</div>
+        	</div>
+    	</div>
+	</div>
+	<div class="row">
+	    <div class="large-3 columns" id="op1">
+	        <div class="cardContainer">
+	            <div class="info">
+	                <p style="display:inline"><div id="op1-name" style="display:inline">NONE</div></p>
+	                <p style="display:inline">Bank: <div id="op1-bank" style="display:inline"></div></p>
+	                <p style="display:inline">Bet: <div id="op1-bet" style="display:inline"></div></p>
+	            </div>
+	            <div class="cards">
+	                <img class="card" id="op1-card1" />
+	                <img class="card" id="op1-card2" />
+	            </div>
+	        </div>
+	    </div>
+	    <div class="large-6 columns">
+	        <div class="cardContainer" id="tableCards">
+	            <div class="tableInfo">
+	                <p style="display:inline" >Pot: <div style="display:inline" id="potContainer">0</div></p>
+	            </div>
+	            <img class="card" id="card1" />
+	            <img class="card" id="card2" />
+	            <img class="card" id="card3" />
+	            <img class="card" id="card4" />
+	            <img class="card" id="card5" />
+	        </div>
+	    </div>
+	    <div class="large-3 columns" id="op6">
+	        <div class="cardContainer">
+	            <div class="info">
+	                <p style="display:inline"><div id="op6-name" style="display:inline">NONE</div></p>
+	                <p style="display:inline">Bank: <div id="op6-bank" style="display:inline"></div></p>
+	                <p style="display:inline">Bet: <div id="op6-bet" style="display:inline"></div></p>
+	            </div>
+	            <div class="cards">
+	                <img class="card" id="op6-card1" />
+	                <img class="card" id="op6-card2" />
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<div class="row">
+	    <div class="large-3 columns">
+	        <div class="cardContainer" >
+	            <h1>My hand:</h1>
+	            <img class="card" id="myCard1" />
+	            <img class="card" id="myCard2" />
+	            <h2 id="betting" style="color:yellow;display:none;">Betting!</h2>
+	        </div>
+	    </div>
+	    <div class="large-5 columns">
+	        <div class="cardContainer" style="position:relative;" >
+	            <button id="checkSend" class="button [tiny small large]" type="button">Check</button>
+	            <button id="foldSend" class="button [tiny small large]" type="button">Fold</button>
+	            <button id="startGame" class="button [tiny small large]"type="button">Start</button>
+	            <p>Bank: <span id="myBank" style="color:yellow;display:inline;"></span>
+	            Current Bet: <span style="display:inline" id="betContainer">0</span></p>
+	            <div class="input-group" id="betBox" >
+	                <input type="text" class="form-control" id="betAmt" />
+	                <span class="input-group-btn">
+	                    <button id="betSend" class="button [tiny small large]" type="button">Bet!</button>
+	                </span>
+	            </div>
+	        </div>
+    	</div>
+    	<div class="large-4 columns">
+    	    <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h3 class="panel-title">Chat</h3>
+	            </div>
+	            <div class="panel-body" id="chatBox" style="height:154px;overflow:scroll;">
+	            </div>
+	            <div class="panel-footer">
+	                <div class="input-group">
+	                    <input type="text" class="form-control" id="chatText" />
+	                    <span class="input-group-btn">
+	                        <button id="chatSend" class="btn btn-default" type="button">send message</button>
+	                    </span>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 </div>
-<div class="row">
-    <div class="large-3 columns baseContainer" style="border: 1px solid black" id="op1">
-        <div class="cardContainer">
-            <div class="info">
-                <p style="display:inline"><div id="op1-name" style="display:inline">NONE</div></p>
-                <p style="display:inline">Bank: <div id="op1-bank" style="display:inline"></div></p>
-                <p style="display:inline">Bet: <div id="op1-bet" style="display:inline"></div></p>
-            </div>
-            <div class="cards">
-                <img class="card" id="op1-card1" />
-                <img class="card" id="op1-card2" />
-            </div>
-        </div>
-    </div>
-    <div class="large-6 columns baseContainer" style="border: 1px solid black">
-        <div class="cardContainer" id="tableCards">
-            <div class="tableInfo">
-                <p style="display:inline" >Pot: <div style="display:inline" id="potContainer">0</div></p>
-            </div>
-            <img class="card" id="card1" />
-            <img class="card" id="card2" />
-            <img class="card" id="card3" />
-            <img class="card" id="card4" />
-            <img class="card" id="card5" />
-        </div>
-    </div>
-    <div class="large-3 columns baseContainer" style="border: 1px solid black" id="op6">
-        <div class="cardContainer">
-            <div class="info">
-                <p style="display:inline"><div id="op6-name" style="display:inline">NONE</div></p>
-                <p style="display:inline">Bank: <div id="op6-bank" style="display:inline"></div></p>
-                <p style="display:inline">Bet: <div id="op6-bet" style="display:inline"></div></p>
-            </div>
-            <div class="cards">
-                <img class="card" id="op6-card1" />
-                <img class="card" id="op6-card2" />
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="large-3 columns baseContainer" style="border: 1px solid black">
-        <div class="cardContainer" >
-            <h1>My hand:</h1>
-            <img class="card" id="myCard1" />
-            <img class="card" id="myCard2" />
-            <h2 id="betting" style="color:yellow;display:none;">Betting!</h2>
-        </div>
-    </div>
-    <div class="large-5 columns baseContainer" style="border: 1px solid black">
-        <div class="cardContainer" style="position:relative;" >
-            <button id="checkSend" class="button [tiny small large]" type="button">Check</button>
-            <button id="foldSend" class="button [tiny small large]" type="button">Fold</button>
-            <button id="startGame" class="button [tiny small large]"type="button">Start</button>
-            <p>Bank: <span id="myBank" style="color:yellow;display:inline;"></span>
-            Current Bet: <span style="display:inline" id="betContainer">0</span></p>
-            <div class="input-group" id="betBox" >
-                <input type="text" class="form-control" id="betAmt" />
-                <span class="input-group-btn">
-                    <button id="betSend" class="button [tiny small large]" type="button">Bet!</button>
-                </span>
-            </div>
-        </div>
-    </div>
-    <div class="large-4 columns baseContainer" style="border: 1px solid black">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Chat</h3>
-            </div>
-            <div class="panel-body" id="chatBox" style="height:154px;overflow:scroll;">
-            </div>
-            <div class="panel-footer">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="chatText" />
-                    <span class="input-group-btn">
-                        <button id="chatSend" class="btn btn-default" type="button">send message</button>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 {% endblock %}
 
